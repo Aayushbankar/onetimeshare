@@ -1,0 +1,12 @@
+OneTimeShare/
+├── app/
+│   ├── __init__.py
+│   ├── routes.py
+│   └── utils.py
+├── tests/
+├── docker/
+├── docs/
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
