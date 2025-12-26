@@ -25,23 +25,33 @@
 ---
 
 ## 📅 Day 1: Skeleton & Prototype (Dec 25, 2025)
-**Status**: 🚧 In Progress
+**Status**: ✅ Completed
 
 ### Tasks
-- [ ] **Flask Setup**: Create the basic Flask application factory structure (`app/__init__.py`, `run.py`).
-- [ ] **Docker Initialization**: specific `Dockerfile` for the Flask app and a `docker-compose.yml` that includes the Redis service.
-- [ ] **Basic Upload Route**: Implement a minimal `/upload` endpoint that can accept a file via POST request.
-- [ ] **Redis Connection**: Verify connection between Flask and the Redis container.
-- [ ] **Health Check**: Ensure the application runs locally via `docker-compose up`.
+- [x] **Flask Setup**: Create the basic Flask application factory structure (`app/__init__.py`, `run.py`).
+- [x] **Docker Initialization**: specific `Dockerfile` for the Flask app and a `docker-compose.yml` that includes the Redis service.
+- [x] **Basic Upload Route**: Implement a minimal `/upload` endpoint that can accept a file via POST request.
+- [x] **Redis Connection**: Verify connection between Flask and the Redis container.
+- [x] **Health Check**: Ensure the application runs locally via `docker-compose up`.
 
 ---
 
-## 📅 Week 1: Foundation (Dec 26 - Dec 31)
-**Focus**: Robust Upload System & Basic Storage
+## 📅 Day 2: Core Logic (Dec 26, 2025)
+**Status**: ✅ Completed
 
-- **Day 2 (Dec 26): Core Logic**
-  - Implement secure file saving mechanism (saving to disk with unique IDs).
-  - Draft the metadata structure to be stored in Redis (filename, original name, upload time).
+### Tasks
+- [x] **Secure File Saving**: Files saved to disk with UUID-based filenames.
+- [x] **Extension Validation**: Only allow pdf, txt, png, jpg, jpeg, gif, env.
+- [x] **File Size Validation**: Max 20MB limit via MAX_FILE_SIZE config.
+- [x] **Redis Metadata Storage**: Store filename, content_type, upload_time using hset().
+- [x] **TTL Expiration**: Auto-delete after 5 hours via REDIS_TTL.
+- [x] **API Endpoints**: `/upload` (POST), `/info/<token>` (GET), `/list-files` (GET).
+- [x] **Configuration**: config.py with environment variable support.
+
+---
+
+## 📅 Week 1: Foundation (Dec 27 - Dec 31)
+**Focus**: Link Generation, UI, Download & Self-Destruct
 
 - **Day 3 (Dec 27): Link Generation**
   - Implement UUID/Token generation for unique shareable links.
