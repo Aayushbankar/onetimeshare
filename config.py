@@ -10,3 +10,5 @@ class Config:
     ALLOWED_EXTENSIONS = {'pdf', 'txt', 'png', 'jpg', 'jpeg', 'gif','env'}
     MAX_FILE_SIZE = 20 * 1024 * 1024  # 20 mb
     REDIS_TTL = 5 * 60 * 60  # 5 hours
+
+    BASE_URL = os.environ.get('BASE_URL', 'http://localhost:5000')
