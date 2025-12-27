@@ -74,9 +74,28 @@
 
 ---
 
-- **Day 3 (Dec 27): Link Generation**
-  - Implement UUID/Token generation for unique shareable links.
-  - Create the database abstraction layer for Redis interaction.
+## 📅 Day 3: Link Generation & Architecture (Dec 27, 2025)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Service Layer Pattern**: Created `services/redis_service.py` with RedisService class.
+- [x] **LinkGenerator**: Created `utils/link_generator.py` for URL generation.
+- [x] **File Validation Utility**: Created `utils/get_uuid.py` with custom exceptions.
+- [x] **Routes Refactored**: Updated routes to use services instead of direct Redis calls.
+- [x] **TTL Expiration**: Implemented via `expire()` with configurable timeout.
+- [x] **All Endpoints Working**: `/upload`, `/info/<token>`, `/download/<token>`, `/list-files`.
+
+### Lessons Learned
+- Service Layer Pattern: Routes handle HTTP, services handle business logic
+- Python ≠ Java: No `extends` — use composition
+- `__init__` has TWO underscores on each side
+- Import paths: `from app.utils.x` not `from utils.x`
+- Custom exceptions make debugging easier
+
+---
+
+## 📅 Week 1: Foundation (Remaining Days)
+**Focus**: UI, Download & Self-Destruct
 
 - **Day 4 (Dec 28): Basic UI**
   - Set up Bootstrap 5 templates.
