@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Download | OneTimeShare{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1 class="hero-title">SECURE DOWNLOAD</h1>
+        <p class="hero-subtitle">Your file is ready. This link works once.</p>
+    </div>
+    
+    <!-- Containment Card -->
+    <div class="containment-card">
+        <!-- Corner Screws -->
+        <div class="screw screw-tl"></div>
+        <div class="screw screw-tr"></div>
+        <div class="screw screw-bl"></div>
+        <div class="screw screw-br"></div>
+        
+        {% if metadata %}
+        <!-- File Ready Section -->
+        <div class="download-ready">
+            <div class="success-icon">📥</div>
+            <h2 class="success-title">FILE AVAILABLE</h2>
+            
+            <div class="file-info-display">
+                <div class="file-info-row">
+                    <span class="label">FILENAME:</span>
+                    <span class="value">{{ metadata.real_filename }}</span>
+                </div>
+                <div class="file-info-row">
+                    <span class="label">TYPE:</span>
+                    <span class="value">{{ metadata.content_type }}</span>
+                </div>
+                <div class="file-info-row">
+                    <span class="label">TOKEN:</span>
+                    <span class="value token-value">{{ metadata.token }}</span>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <p>⚠️ This link works <strong>ONCE</strong></p>
+                <p>⚠️ After download, file will be <strong>DELETED</strong></p>
+            </div>
+            
+            <!-- Download button - Day 5 will add actual download functionality -->
+            <p class="helper-text-small">Download functionality coming in Day 5</p>
+        </div>
+        
+        {% else %}
+        <!-- File Not Found Section -->
+        <div class="download-error">
+            <div class="error-icon">✕</div>
+            <h2 class="error-title">FILE NOT FOUND</h2>
+            <p class="error-message">This link has expired or already been used.</p>
+            
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+                UPLOAD NEW FILE
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

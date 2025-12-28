@@ -1,5 +1,5 @@
 
-from flask import Blueprint, current_app, request, jsonify
+from flask import Blueprint, current_app, request, jsonify, render_template
 from config import Config
 import os 
 
@@ -11,6 +11,8 @@ from app.utils.get_uuid import generate_uuid_and_filepath
 
 
 
+
+
 bp = Blueprint('main', __name__)
 
 redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT, )
@@ -18,11 +20,7 @@ redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT,
 
 @bp.route('/')
 def index():
-    return 'OneTimeShare is running!'
-
-# @bp.route('/hello')
-# def hello():
-#     return 'Hello, World!'
+    return render_template('index.html')
 
 
 @bp.route('/upload', methods=['POST'])
@@ -59,12 +57,10 @@ def upload_file():
 @bp.route('/download/<token>', methods=['GET'])
 def download_file(token):
     try:
-        if redis_service.get_file_metadata(token):
-            return jsonify({"status": "success", "metadata": redis_service.get_file_metadata(token)}), 200
-        else:
-            return jsonify({"status": "error", "message": "Failed to get file metadata"}), 500
+        metadata = redis_service.get_file_metadata(token)
+        return render_template('download.html', metadata=metadata, token=token)
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return render_template('download.html', metadata=None, token=token)
 
 
 

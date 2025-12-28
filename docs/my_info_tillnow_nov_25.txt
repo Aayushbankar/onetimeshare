@@ -1,0 +1,111 @@
+Aayush bankar 
+Studying Diploma in information technology @ government polytechnic Gandhinagar 
+Currently in semester  3 ; cpi : 8.51
+Projects :
+    1> https://github.com/Aayushbankar/sillicon-squad -> sillcon squad	 [ forgotten  too old project vibe coded nto understood ]
+        a. About 
+            i. This is my first simple web project , it simply uses html and css . 
+        b. Tech-stack 
+            i. Html
+            ii. Css
+        c. Live links 
+            i. https://aayushbankar.github.io/sillicon-squad/
+    2> https://github.com/Aayushbankar/click-cast -> click-cast 	[ same as silicon squad -  but understood the vibe coded code ]
+        a. About 
+            i. ClickCast is a dynamic web application that serves as a news aggregator, providing users with the latest articles across various topics. It aims to deliver insightful content while ensuring an engaging user experience.
+        b. Tech stack 
+            i. Backend : python
+            ii. Front end : html css 
+            iii. Api : newsapi
+            iv. Libraries : flask , requests 
+    3> https://github.com/Aayushbankar/logic-gate-simulator – logic-gate simulator  [ made by self ]
+        a. About 
+            i. A Python program that simulates various binary logic gates (AND, OR, NAND, NOR, XOR, XNOR). Users can input binary values and select logic gates to perform operations. The program supports input validation and repeated usage
+        b. Tech stack 
+            i. Python 
+    4> https://github.com/Aayushbankar/Password-Generator – password generator  [ made by self ]
+        a. About 
+            i. A simple and secure Password Generator built using PHP and HTML. This project demonstrates the generation of random, strong passwords with customizable length and character combinations. The generated password can be copied with a single click for ease of use.
+        b. Tech stack 
+            i. Php 
+            ii. Html
+            iii. Css
+
+    5> https://github.com/Aayushbankar/Franz-Kafka-Story-generator – franz kafka style story generator  [ mid recent 1 year ao , everthing vibecoded and understood only thery and some buzz words and rest wetten in elarned thngs ]
+        a. About	
+            i. This project implements a GPT-2 based text generation system with a web interface. It uses a fine-tuned GPT-2 model trained on Kafka's works to generate Kafka-style text.
+        b. Tech stack 
+            i. Front end : html , css ,js 
+            ii. Backend : python 
+            iii. Libs: flask , jinja2,requests,gtts
+            iv. Learned things: effective use of ai for learning 
+                1. Used chatgpt and  youtube to learn about fine tuning 
+                2. Used chatgpt to generate the codes and fine tune model gpt2 
+                3. Learned vibe coding but while follwonf the complelet worklflow not just simple copy pasteing and made tha tthign my style and tehn using chapt as my main tool for coding while I do the orchestrating 
+        c. Live links 
+            i. Model link at : https://huggingface.co/bankar404/kafka-gpt2-story-generator
+    6> https://github.com/Aayushbankar/yt_stlk –  yt_stlk   	 		[ a fast vibecoded app to get updates an check if my current couse  creator n yt uploaded a new part of the course in the playlist ] 
+        a. About :
+            i. A Flask web application that allows users to analyze YouTube user activity, including videos, shorts, and playlist additions.
+        b. Tech stack 
+            i. Frontend : html css 
+            ii. Backend : python 
+            iii. Libs : flask , google api ,requests 
+        c. Live links :
+            i. https://stkher.onrender.com/
+        d. Things learnt :
+            i. From this project I learnt  hwo to deploy python flask or Django projects 
+    7> https://github.com/Aayushbankar/ssip_bot – ssip bot 				[ a not selected ahckathon project where I cibecoded all and didn’t writ a single code and  jus torchestraded the folw and tried to explain my old rag project to make this franklestine monsterorstisty ]
+        a. About 
+            i. MOSDAC AI Help Bot is a comprehensive AI-powered assistant for information retrieval from the MOSDAC (Meteorological and Oceanographic Satellite Data Archival Center) portal. This project successfully implements the SSIP 2025 Problem Statement PS000007 for Space Applications Centre ISRO with production-ready features including navigation assistance, multi-language support, feedback collection,
+        b. Tech stack 
+            i. Python 
+            ii.  Api – how ot make api for servies 
+            iii. Libs : fastapi , flask , chromadb , bs4, google gemini api  
+    8> https://github.com/Aayushbankar/privata – privata 		[ a well understood but half forgotten project I built from a  bottcamp and really leant , did vibe code 50-60% but yea I leanrte things from this in theory and code ] 
+        a. About 
+            i. Privata is a lightweight, offline-first document ingestion and querying tool that uses local embeddings and cloud-based LLMs (Google Gemini) to answer questions from your private files — with no server, no browser, and no GPU required.It follows the RAG (Retrieval-Augmented Generation) architecture and runs entirely via CLI. Users can ingest PDFs, markdown, and text files, then interact with them using AI-powered semantic search.
+        b. Tech stack :
+            i. Backed : python 
+            ii. Front end : html css 
+            iii. Libs : lang chain , sentence transformer , googlegenerative api , requests . chroma db 
+        c. Things I learnt :
+            i. Hwo to make a simple rag model , and all the archietecute between it 
+    9> It gpg website :  				[ sattred as a simple vibe coded project with faculty then turned into a well coded project where I coded many thing and I understand the working and I did worl bes ton this and is still mainaitng this for my department ] 
+        a. About :
+            i. This is the official website for the Information Technology Department of Government Polytechnic Gandhinagar, developed entirely by Aayush Bankar & divya darji.
+        b. Tech stack :
+            i.  HTML5 / CSS3 / Responsive Design
+            ii.   Modular JavaScript (Vanilla JS architecture)
+            iii.  API & Google Drive integration (as CMS)
+            iv.  Jekyll Templating and Static Site Generation
+            v.  Deployment on GitHub Pages
+        c. Things I learnt :
+            i. Complete project design , using limited resources , hosting using github pages , workflow using Jekyll , js (vibe coding using ai tools ) , Project Planning, Architecture Design, and Execution
+        d. Live links 
+            i. itgpg.github.io/it/
+
+languages :
+	English , hindi , marathi , Gujarati  [ all fluent ] 
+Certs :
+Goldman Sachs - Internal Audit Job Simulation
+ Deloitte Australia - Cyber Job Simulation
+Java Bootcamp -> LUEJAVAAUG125904
+15 Aug 2025 • Completed
+Build RAG Chatbot with Python -> LUERCBMAY125988
+04 Jun 2025 • Completed
+Git & GitHub Bootcamp  -> LUEGGMAR1258
+05 Mar 2025 • Completed
+Python Bootcamp -> LUEPYTJAN1252630
+03 Feb 2025 • Completed
+IBM Watsonx Text-to-Speech through IBM SkillsBuild
+
+Experience :
+	1 week interhsip at waytoweb techonoliges ahemdeadadb onsite , 
+
+Misc-tech I knowe : git , gtihub, hosting , linux , osi , basics databse , designing, api designing basics ,  
+ 
+My main intrests to go into : cynber sec  , combination of fornseics and cybersec , or anything whch comines with cyber  
+Dob – march 2008 
+Contact : aayushbankar42@gmail.com
+Mob : 6351400725 	
