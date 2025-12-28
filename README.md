@@ -94,24 +94,43 @@
 
 ---
 
-## 📅 Week 1: Foundation (Remaining Days)
-**Focus**: UI, Download & Self-Destruct
+## 📅 Day 4: Frontend UI (Dec 28, 2025)
+**Status**: ✅ Completed
 
-- **Day 4 (Dec 28): Basic UI**
-  - Set up Bootstrap 5 templates.
-  - Create the `index.html` (Upload Interface) with a progress bar or simple file input.
+### Tasks
+- [x] **Design System**: "Industrial Urgency" theme (dark charcoal + Safety Orange).
+- [x] **AI Mockups**: Generated 4 mockups after Figma attempt failed.
+- [x] **Base Template**: `base.html` with JetBrains Mono, industrial navbar.
+- [x] **Upload Page**: `index.html` with containment card, drag-drop, progress bar.
+- [x] **Download Page**: `download.html` showing file metadata.
+- [x] **CSS**: 540 lines implementing design system.
+- [x] **JavaScript**: Drag-drop, file validation, fetch upload, copy-to-clipboard.
+- [x] **Route Updated**: `/download/<token>` now renders template with metadata.
+
+### Lessons Learned
+- `{% include %}` ≠ `{% extends %}` (Jinja templating)
+- Event propagation: label inside div = double triggers
+- AI is leverage, not replacement
+- Frontend is a skill, not "easy mode"
+
+---
+
+## 📅 Week 1: Foundation (Remaining Days)
+**Focus**: Download & Self-Destruct
 
 - **Day 5 (Dec 29): Download/View Endpoint**
   - Create the download route `/d/<token>`.
-  - Implement logic to look up file metadata from Redis using the token.
+  - Implement actual file download (send_file).
+  - One-time delete after download.
 
 - **Day 6 (Dec 30): Self-Destruct Mechanism**
-  - Implement the "Delete after read" logic (delete file from disk and key from Redis after successful download).
-  - Configure Redis TTL (Time To Live) as a fallback for files that are never downloaded (e.g., 24-hour expiry).
+  - Delete file from disk after download.
+  - Delete Redis key after successful download.
+  - TTL fallback for unviewed files.
 
 - **Day 7 (Dec 31): Recap & Refactor**
   - Code review of the week's work.
-  - Manual testing of the full Upload -> Link -> Download -> Delete flow.
+  - Manual testing of Upload → Link → Download → Delete flow.
   - Write `v0.1` documentation.
 
 ---
