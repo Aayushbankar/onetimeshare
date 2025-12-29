@@ -47,6 +47,7 @@ def generate_uuid_and_filepath(file):
             file = check_file(file)
             #generate a unique file name 
             file_name = str(uuid.uuid4()) + os.path.splitext(file.filename)[1]
+            # file_name = str(uuid.uuid4()) 
             filepath = os.path.join(Config.UPLOAD_FOLDER, file_name)
 
             return file_name, filepath 

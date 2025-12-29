@@ -8,6 +8,8 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import app.services.redis_service as redis_service
 from app.utils.get_uuid import generate_uuid_and_filepath
+from flask import send_from_directory
+import re 
 
 
 
@@ -54,14 +56,55 @@ def upload_file():
 
 
 
-@bp.route('/download/<token>', methods=['GET'])
+
+
+
+
+
+@bp.route('/d/<token>', methods=['GET'])
 def download_file(token):
     try:
-        metadata = redis_service.get_file_metadata(token)
-        return render_template('download.html', metadata=metadata, token=token)
-    except Exception as e:
-        return render_template('download.html', metadata=None, token=token)
 
+        if not redis_service.get_file_metadata(token):
+            return jsonify({"status": "error", "message": "File not found"}), 404   
+        
+
+        metadata = redis_service.get_file_metadata(token)
+        uuid_filename = metadata['filename']
+        original_filename = metadata['real_filename']
+    
+    # Step 3: Serve file safely
+        response_file = send_from_directory(
+        directory=Config.UPLOAD_FOLDER,
+        path=uuid_filename,
+        as_attachment=True,
+        download_name=original_filename  # Shows original name to user
+    )
+
+        return response_file
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+
+
+@bp.route('/download/<token>', methods=['GET'])
+def render_download_page(token):
+    try:
+
+
+        if not redis_service.get_file_metadata(token):
+            return jsonify({"status": "error", "message": "File not found"}), 404   
+        
+
+        metadata = redis_service.get_file_metadata(token)
+        # return render_template('dl.html', metadata=metadata, token=token)/
+        return render_template('dl.html', metadata=metadata, token=token)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 

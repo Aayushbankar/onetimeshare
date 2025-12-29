@@ -115,13 +115,26 @@
 
 ---
 
-## 📅 Week 1: Foundation (Remaining Days)
-**Focus**: Download & Self-Destruct
+## 📅 Day 5: Download/View Endpoint (Dec 29, 2025)
+**Status**: ✅ Completed
 
-- **Day 5 (Dec 29): Download/View Endpoint**
-  - Create the download route `/d/<token>`.
-  - Implement actual file download (send_file).
-  - One-time delete after download.
+### Tasks
+- [x] **Download Route**: Created `/d/<token>` with `send_from_directory()`.
+- [x] **Info Page Route**: Created `/download/<token>` to render dl.html.
+- [x] **Security**: Path traversal protection via send_from_directory.
+- [x] **Frontend**: Download button in dl.html + download.js handler.
+- [x] **Original Filename**: Uses `download_name` parameter.
+- [x] **Full Flow**: Upload → Link → Info Page → Download working.
+
+### Lessons Learned
+- **Restart Flask** after code changes!
+- Two-route pattern: info page + file serve
+- Save Redis results: `metadata = redis_service.get(...)` before using
+
+---
+
+## 📅 Week 1: Foundation (Remaining Days)
+**Focus**: Self-Destruct
 
 - **Day 6 (Dec 30): Self-Destruct Mechanism**
   - Delete file from disk after download.

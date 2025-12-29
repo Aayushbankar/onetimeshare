@@ -44,8 +44,11 @@
                 <p>⚠️ After download, file will be <strong>DELETED</strong></p>
             </div>
             
-            <!-- Download button - Day 5 will add actual download functionality -->
-            <p class="helper-text-small">Download functionality coming in Day 5</p>
+            <div class="download-button">
+                <a href="{{ url_for('main.download_file', token=metadata.token) }}" class="btn btn-primary" download="{{ metadata.real_filename }}">
+                    DOWNLOAD
+                </a>
+            </div>
         </div>
         
         {% else %}
@@ -62,4 +65,11 @@
         {% endif %}
     </div>
 </div>
+
+
+
 {% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/download.js') }}"></script>
+{% endblock %}  
