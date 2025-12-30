@@ -54,57 +54,77 @@ def upload_file():
         return jsonify({"error": str(e)}), 500
 
 
-
-
-
-
-
-
-
 @bp.route('/d/<token>', methods=['GET'])
 def download_file(token):
-    try:
+    try :
+        directory_path = current_app.config['UPLOAD_FOLDER']
+        metadata = redis_service.atomic_delete(token)
 
-        if not redis_service.get_file_metadata(token):
-            return jsonify({"status": "error", "message": "File not found"}), 404   
+        if not metadata:
+            return jsonify({
+                "status": "error",
+                "error": "File not found or already downloaded  "
+            }), 410
+
+        uuid_file_name = metadata.get('filename')
+        original_file_name = metadata.get('real_filename')
+
+        if not uuid_file_name or not original_file_name:
+            return jsonify({
+                "status": "error",
+                "error": "Invalid metadata"
+            }), 500
+
         
+        try :
+            response = send_from_directory(
+                directory=directory_path,
+                path=uuid_file_name,
+                as_attachment=True,
+                download_name=original_file_name
+            )
 
-        metadata = redis_service.get_file_metadata(token)
-        uuid_filename = metadata['filename']
-        original_filename = metadata['real_filename']
-    
-    # Step 3: Serve file safely
-        response_file = send_from_directory(
-        directory=Config.UPLOAD_FOLDER,
-        path=uuid_filename,
-        as_attachment=True,
-        download_name=original_filename  # Shows original name to user
-    )
+            
+            file_path = os.path.join(directory_path, uuid_file_name)
 
-        return response_file
+            try :
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                    current_app.logger.info(f"✅ Deleted file: {uuid_file_name}")
+                else:
+                    current_app.logger.warning(f"File not found: {file_path}")
+            except Exception as e:
+                current_app.logger.error(f"Failed to delete: {e}")
+                # Don't fail the request!
+
+            return response
+
+        except FileNotFoundError:
+            current_app.logger.error(f"File not found on disk: {uuid_file_name}")
+            return jsonify({
+                "status": "error",
+                "error": "File not found on disk"
+            }), 404
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-
-
-
+        current_app.logger.error(f"Error in download route: {e}")
+        return render_template('404.html'), 500
 
 @bp.route('/download/<token>', methods=['GET'])
 def render_download_page(token):
+    """Render the download page with file metadata."""
     try:
-
-
-        if not redis_service.get_file_metadata(token):
-            return jsonify({"status": "error", "message": "File not found"}), 404   
-        
-
         metadata = redis_service.get_file_metadata(token)
-        # return render_template('dl.html', metadata=metadata, token=token)/
+        
+        if not metadata:
+            return render_template('404.html'), 404
+        
         return render_template('dl.html', metadata=metadata, token=token)
-
+        
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        current_app.logger.error(f"Error in download page route: {e}")
+        return render_template('404.html'), 500
+
 
 
 
@@ -123,6 +143,8 @@ def list_files():
    try :
     if redis_service.list_files():
         return jsonify({"status": "success", "files": redis_service.list_files()}), 200
+    elif redis_service.list_files() is None:
+        return jsonify({"status": "error", "message": "no files in the db"}), 200
     else:
         return jsonify({"status": "error", "message": "Failed to list files"}), 500
    except Exception as e:
@@ -139,3 +161,40 @@ def file_info(token):
    except Exception as e:
         return jsonify({"error": str(e)}), 500
         
+
+@bp.route('/admin/cleanup', methods=['POST'])
+def cleanup_orphans():
+    """
+    Admin endpoint to clean up orphaned files.
+    Deletes files that exist on disk but have no Redis metadata.
+    """
+    try:
+        result = redis_service.cleanup_orphan_files()
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@bp.route('/admin/cleanup-metadata', methods=['POST'])
+def cleanup_orphan_metadata():
+    """
+    Admin endpoint to clean up orphaned Redis metadata.
+    Deletes Redis keys that have no corresponding file on disk.
+    """
+    try:
+        result = redis_service.cleanup_orphan_metadata()
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Flask error handlers
+@bp.app_errorhandler(404)
+def page_not_found(e):
+    """Handle 404 errors globally."""
+    return render_template('404.html'), 404
+
+@bp.app_errorhandler(500)
+def internal_server_error(e):
+    """Handle 500 errors globally."""
+    current_app.logger.error(f"Internal server error: {e}")
+    return render_template('404.html'), 500
