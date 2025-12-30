@@ -133,13 +133,34 @@
 
 ---
 
-## 📅 Week 1: Foundation (Remaining Days)
-**Focus**: Self-Destruct
+## 📅 Day 6: Self-Destruct Mechanism (Dec 30, 2025)
+**Status**: ✅ Completed
 
-- **Day 6 (Dec 30): Self-Destruct Mechanism**
-  - Delete file from disk after download.
-  - Delete Redis key after successful download.
-  - TTL fallback for unviewed files.
+### Tasks
+- [x] **Atomic Deletion**: Redis WATCH/MULTI/EXEC for race-safe deletion.
+- [x] **File Deletion**: Remove file from disk after successful download.
+- [x] **Orphan Cleanup**: Bidirectional sync (files ↔ metadata).
+- [x] **Startup Cleanup**: Automatic cleanup on app restart.
+- [x] **Custom 404**: Error page for expired/deleted files.
+- [x] **Download Route Updated**: `/d/<token>` now deletes after serving.
+
+### Critical Bug Fixed
+```diff
+- directory=Config.UPLOAD_FOLDER
++ directory_path = current_app.config['UPLOAD_FOLDER']
+```
+Found through testing — files were not deleting because of wrong config reference!
+
+### Lessons Learned
+- `Config.UPLOAD_FOLDER` ≠ `current_app.config['UPLOAD_FOLDER']`
+- `pipeline.unwatch()` required after WATCH if no transaction
+- Test like a user, not a developer
+- 29 mistakes made, 29 fixed — iteration works
+
+---
+
+## 📅 Week 1: Foundation (Remaining Days)
+**Focus**: Recap & Refactor
 
 - **Day 7 (Dec 31): Recap & Refactor**
   - Code review of the week's work.
