@@ -137,14 +137,21 @@ class RedisService:
                 pipeline = self.redis_client.pipeline()
                 pipeline.watch(token)
             #    pipeline.multi()
-                metadata = pipeline.hgetall(token)
-                if metadata:
-                    pipeline.multi()
-                    pipeline.delete(token)
-                    pipeline.execute()
-                    return metadata
-                else:
-                    pipeline.unwatch()
+                metadata = self.redis_client.hgetall(token)
+                try:
+                    if metadata:
+                        pipeline.multi()
+                        pipeline.delete(token)
+                        pipeline.execute()
+                        return metadata
+                    else:
+                        pipeline.unwatch()
+                        return None
+                except redis.exceptions.WatchError:
+                    self.logger.error(f"Redis error: WatchError")
+                    return None
+                except Exception as e:
+                    self.logger.error(f"Redis connection error: {e}")
                     return None
             else:
                 # self.logger.error("Redis connection error")
@@ -152,7 +159,8 @@ class RedisService:
         except Exception as e:
             self.logger.error(f"Redis connection error: {e}")
             return None
-
+        finally :
+            pipeline.reset()
 
 
 

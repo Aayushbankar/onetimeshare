@@ -3,7 +3,7 @@ import os
 class Config:
     
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key')
-    UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', 'uploads')
+    UPLOAD_FOLDER = os.path.abspath(os.environ.get('UPLOAD_FOLDER', 'uploads'))
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 mb
     REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')  # Default is 'localhost'
     REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
