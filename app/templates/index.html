@@ -1,105 +1,136 @@
-{% extends 'base.html' %}
-
-{% block title %}Upload | OneTimeShare{% endblock %}
-
+{% extends 'base.html' %} {% block title %}Upload | OneTimeShare{% endblock %}
 {% block content %}
 <div class="page-container">
-    <!-- Hero Section -->
-    <div class="hero">
-        <h1 class="hero-title">SHARE FILES SECURELY.</h1>
-        <h1 class="hero-title hero-accent">ONCE.</h1>
-        <p class="hero-subtitle">Upload a file. Get a one-time link. It self-destructs after download.</p>
-    </div>
-    
-    <!-- Containment Card -->
-    <div class="containment-card">
-        <!-- Corner Screws -->
-        <div class="screw screw-tl"></div>
-        <div class="screw screw-tr"></div>
-        <div class="screw screw-bl"></div>
-        <div class="screw screw-br"></div>
-        
-        <!-- Upload Section (shown by default) -->
-        <div id="upload-section">
-            <!-- Drop Zone -->
-            <div id="drop-zone" class="drop-zone">
-                <div class="drop-zone-content">
-                    <div class="upload-icon">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                            <polyline points="17 8 12 3 7 8"></polyline>
-                            <line x1="12" y1="3" x2="12" y2="15"></line>
-                        </svg>
-                    </div>
-                    <p class="drop-text">DRAG FILE SECURELY</p>
-                    <p class="drop-text-sub">or</p>
-                    <label for="file-input" class="btn btn-primary">BROWSE FILES</label>
-                    <input type="file" id="file-input" hidden>
-                </div>
-            </div>
-            
-            <!-- File Info (hidden until file selected) -->
-            <div id="file-info" class="file-info hidden">
-                <div class="file-details">
-                    <span class="file-icon">📄</span>
-                    <div class="file-meta">
-                        <p id="file-name" class="file-name">filename.pdf</p>
-                        <p id="file-size" class="file-size">2.4 MB</p>
-                    </div>
-                    <button id="remove-file" class="btn-icon" title="Remove file">✕</button>
-                </div>
-            </div>
-            
-            <!-- Progress Bar (hidden until uploading) -->
-            <div id="progress-container" class="progress-container hidden">
-                <div class="progress-bar">
-                    <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
-                </div>
-                <p id="progress-text" class="progress-text">0%</p>
-            </div>
-            
-            <!-- Upload Button -->
-            <button id="upload-btn" class="btn btn-primary btn-large" disabled>
-                <span id="upload-btn-text">UPLOAD SECURELY</span>
-            </button>
-            
-            <!-- Helper Text -->
-            <div class="helper-text">
-                <p>📦 MAX SIZE: 20 MB</p>
-                <p>📎 ALLOWED: PDF, TXT, PNG, JPG, GIF</p>
-            </div>
-        </div>
-        
-        <!-- Success Section (hidden until upload complete) -->
-        <div id="success-section" class="hidden">
-            <div class="success-icon">✓</div>
-            <h2 class="success-title">FILE UPLOADED</h2>
-            <p class="success-subtitle">Your one-time download link:</p>
-            
-            <div class="link-container">
-                <input type="text" id="share-link" class="share-link" readonly>
-                <button id="copy-btn" class="btn btn-primary">📋 COPY</button>
-            </div>
-            
-            <div class="warning-box">
-                <p>⚠️ This link expires in <strong>5 HOURS</strong></p>
-                <p>⚠️ Link works <strong>ONCE</strong> then self-destructs</p>
-            </div>
-            
-            <button id="upload-another" class="btn btn-secondary">UPLOAD ANOTHER FILE</button>
-        </div>
-        
-        <!-- Error Section (hidden) -->
-        <div id="error-section" class="hidden">
-            <div class="error-icon">✕</div>
-            <h2 class="error-title">UPLOAD FAILED</h2>
-            <p id="error-message" class="error-message">Unknown error occurred.</p>
-            <button id="try-again" class="btn btn-primary">TRY AGAIN</button>
-        </div>
-    </div>
-</div>
-{% endblock %}
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1 class="hero-title">SHARE FILES SECURELY.</h1>
+    <h1 class="hero-title hero-accent">ONCE.</h1>
+    <p class="hero-subtitle">
+      Upload a file. Get a one-time link. It self-destructs after download.
+    </p>
+  </div>
 
-{% block scripts %}
+  <!-- Containment Card -->
+  <div class="containment-card">
+    <!-- Corner Screws -->
+    <div class="screw screw-tl"></div>
+    <div class="screw screw-tr"></div>
+    <div class="screw screw-bl"></div>
+    <div class="screw screw-br"></div>
+
+    <!-- Upload Section (shown by default) -->
+    <div id="upload-section">
+      <!-- Drop Zone -->
+      <div id="drop-zone" class="drop-zone">
+        <div class="drop-zone-content">
+          <div class="upload-icon">
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <p class="drop-text">DRAG FILE SECURELY</p>
+          <p class="drop-text-sub">or</p>
+          <label for="file-input" class="btn btn-primary">BROWSE FILES</label>
+          <input type="file" id="file-input" hidden />
+        </div>
+      </div>
+
+      <!-- File Info (hidden until file selected) -->
+      <div id="file-info" class="file-info hidden">
+        <div class="file-details">
+          <span class="file-icon">📄</span>
+          <div class="file-meta">
+            <p id="file-name" class="file-name">filename.pdf</p>
+            <p id="file-size" class="file-size">2.4 MB</p>
+          </div>
+          <button id="remove-file" class="btn-icon" title="Remove file">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar (hidden until uploading) -->
+      <div id="progress-container" class="progress-container hidden">
+        <div class="progress-bar">
+          <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+        </div>
+        <p id="progress-text" class="progress-text">0%</p>
+      </div>
+
+      <!-- Upload Button -->
+      <button id="upload-btn" class="btn btn-primary btn-large" disabled>
+        <span id="upload-btn-text">UPLOAD SECURELY</span>
+      </button>
+
+      <!-- Helper Text -->
+      <div class="helper-text">
+        <p>📦 MAX SIZE: 20 MB</p>
+        <p>📎 ALLOWED: PDF, TXT, PNG, JPG, GIF</p>
+      </div>
+
+      <!-- Password Protection Section -->
+      <div class="password-section mt-3">
+        <label class="checkbox-label cursor-pointer">
+          <input type="checkbox" id="use-password" class="me-2" />
+          <span>Protect with Password (Optional)</span>
+        </label>
+
+        <div id="password-container" class="hidden mt-2">
+          <div class="password-wrapper">
+            <span class="password-icon">🔑</span>
+            <input
+              type="password"
+              id="file-password"
+              placeholder="Enter secure password"
+              autocomplete="new-password"
+            />
+            <button type="button" id="toggle-password" class="btn-icon-small">
+              👁️
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Section (hidden until upload complete) -->
+    <div id="success-section" class="hidden">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title">FILE UPLOADED</h2>
+      <p class="success-subtitle">Your one-time download link:</p>
+
+      <div class="link-container">
+        <input type="text" id="share-link" class="share-link" readonly />
+        <button id="copy-btn" class="btn btn-primary">📋 COPY</button>
+      </div>
+
+      <div class="warning-box">
+        <p>⚠️ This link expires in <strong>5 HOURS</strong></p>
+        <p>⚠️ Link works <strong>ONCE</strong> then self-destructs</p>
+      </div>
+
+      <button id="upload-another" class="btn btn-secondary">
+        UPLOAD ANOTHER FILE
+      </button>
+    </div>
+
+    <!-- Error Section (hidden) -->
+    <div id="error-section" class="hidden">
+      <div class="error-icon">✕</div>
+      <h2 class="error-title">UPLOAD FAILED</h2>
+      <p id="error-message" class="error-message">Unknown error occurred.</p>
+      <button id="try-again" class="btn btn-primary">TRY AGAIN</button>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 {% endblock %}

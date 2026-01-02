@@ -1,30 +1,30 @@
 /* ===== DESIGN TOKENS ===== */
 :root {
   /* Colors */
-  --color-primary: #FF5F15;
-  --color-primary-hover: #E54D00;
+  --color-primary: #ff5f15;
+  --color-primary-hover: #e54d00;
   --color-primary-10: rgba(255, 95, 21, 0.1);
   --color-base: #333333;
   --color-base-dark: #1a1a1a;
-  --color-canvas: #F0F2F5;
+  --color-canvas: #f0f2f5;
   --color-card: #2a2a2a;
-  --color-success: #10B981;
-  --color-success-pale: #D1FAE5;
-  --color-error: #DC2626;
-  --color-error-pale: #FEE2E2;
-  --color-warning: #F59E0B;
-  --color-null: #A0A0A0;
-  --color-white: #FFFFFF;
-  
+  --color-success: #10b981;
+  --color-success-pale: #d1fae5;
+  --color-error: #dc2626;
+  --color-error-pale: #fee2e2;
+  --color-warning: #f59e0b;
+  --color-null: #a0a0a0;
+  --color-white: #ffffff;
+
   /* Typography */
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-ui: 'Inter', sans-serif;
-  
+  --font-mono: "JetBrains Mono", monospace;
+  --font-ui: "Inter", sans-serif;
+
   /* Shadows (Hard Industrial) */
   --shadow-sm: 0px 2px 0px #000;
   --shadow-md: 0px 4px 0px #000;
   --shadow-lg: 0px 8px 0px #000;
-  
+
   /* Spacing */
   --space-1: 4px;
   --space-2: 8px;
@@ -36,14 +36,17 @@
 }
 
 /* ===== RESET ===== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 /* ===== BASE ===== */
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -164,7 +167,7 @@ main {
 }
 
 .screw::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -174,10 +177,22 @@ main {
   background: #222;
 }
 
-.screw-tl { top: 12px; left: 12px; }
-.screw-tr { top: 12px; right: 12px; }
-.screw-bl { bottom: 12px; left: 12px; }
-.screw-br { bottom: 12px; right: 12px; }
+.screw-tl {
+  top: 12px;
+  left: 12px;
+}
+.screw-tr {
+  top: 12px;
+  right: 12px;
+}
+.screw-bl {
+  bottom: 12px;
+  left: 12px;
+}
+.screw-br {
+  bottom: 12px;
+  right: 12px;
+}
 
 /* ===== DROP ZONE ===== */
 .drop-zone {
@@ -469,15 +484,15 @@ footer p {
   .hero-title {
     font-size: 1.75rem;
   }
-  
+
   .containment-card {
     padding: var(--space-6);
   }
-  
+
   .drop-zone {
     padding: var(--space-8);
   }
-  
+
   .link-container {
     flex-direction: column;
   }
@@ -537,3 +552,52 @@ footer p {
   letter-spacing: 1px;
 }
 
+/* ===== PASSWORD SECTION ===== */
+.password-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.checkbox-label {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.password-wrapper {
+  display: flex;
+  align-items: center;
+  background: var(--color-base-dark);
+  border: 1px solid var(--color-null);
+  padding: 0 var(--space-2);
+  width: 100%;
+  max-width: 300px;
+}
+
+.password-wrapper input {
+  background: transparent;
+  border: none;
+  color: var(--color-white);
+  padding: var(--space-2);
+  font-family: var(--font-mono);
+  flex: 1;
+  outline: none;
+}
+
+.password-icon {
+  font-size: 16px;
+}
+
+.btn-icon-small {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: var(--space-2);
+}

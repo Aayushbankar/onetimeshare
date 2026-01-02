@@ -30,6 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadAnother = document.getElementById('upload-another');
     const errorMessage = document.getElementById('error-message');
     const tryAgain = document.getElementById('try-again');
+    
+    // Password Elements
+    const usePassword = document.getElementById('use-password');
+    const passwordContainer = document.getElementById('password-container');
+    const filePassword = document.getElementById('file-password');
+    const togglePassword = document.getElementById('toggle-password');
 
     // =========================================================
     // CONFIG
@@ -38,6 +44,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
     
     let selectedFile = null;
+
+    // =========================================================
+    // PASSWORD LOGIC (Added by AI Mentor)
+    // =========================================================
+    
+    // Toggle Password Field Visibility
+    usePassword.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            passwordContainer.classList.remove('hidden');
+            filePassword.focus();
+        } else {
+            passwordContainer.classList.add('hidden');
+            filePassword.value = ''; // Clear password if unchecked
+        }
+    });
+
+    // Toggle Password Text Visibility (Eye Icon)
+    togglePassword.addEventListener('click', () => {
+        const type = filePassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        filePassword.setAttribute('type', type);
+        togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
 
     // =========================================================
     // DROP ZONE INTERACTIONS
@@ -155,6 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Create form data
         const formData = new FormData();
         formData.append('file', selectedFile);
+
+        // Add Password if enabled
+        if (usePassword.checked && filePassword.value) {
+            formData.append('password', filePassword.value);
+        }
 
         try {
             // Simulate progress (fetch doesn't support upload progress easily)

@@ -11,13 +11,13 @@ from app.utils.get_uuid import generate_uuid_and_filepath
 from flask import send_from_directory
 import re 
 
-
+from app.utils.password_utils import PasswordUtils
 
 
 
 bp = Blueprint('main', __name__)
 
-redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT, )
+redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT, Config.REDIS_DB)
 
 
 @bp.route('/')
@@ -34,12 +34,26 @@ def upload_file():
         os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True) 
         file.save(filepath)
 
+
+        # step 1.1 check if the user has kept the passowrd settin gturned on / off 
+        password = request.form.get('password')
+        password_hash = None
+        is_protected = False
+
+        if password:
+            password_hash = PasswordUtils.hash_password(password)
+            is_protected = True
+
+
+
         # step 2 : store file metadata in redis
         metadata = {
             'filename': file_name,
             'real_filename': secure_filename(file.filename),
             'content_type': file.content_type,
-            'token': file_name
+            'token': file_name,
+            'is_protected': str(is_protected),
+            'password_hash': password_hash if password_hash else "",
         }
         
         redis_service.store_file_metadata( file_name, metadata)
@@ -68,6 +82,7 @@ def download_file(token):
 
         uuid_file_name = metadata.get('filename')
         original_file_name = metadata.get('real_filename')
+        user_input_passowrd = PasswordUtils.hash_password(metadata.get('password'))
 
         if not uuid_file_name or not original_file_name:
             return jsonify({
@@ -77,27 +92,60 @@ def download_file(token):
 
         
         try :
-            response = send_from_directory(
-                directory=directory_path,
-                path=uuid_file_name,
-                as_attachment=True,
-                download_name=original_file_name
-            )
 
-            
-            file_path = os.path.join(directory_path, uuid_file_name)
+            if metadata.get('is_protected') == 'True':
+                password = request.form.get('password')
+                if not password:
+                    return jsonify({
+                        "status": "error",
+                        "error": "Password is required"
+                    }), 401
+                if not PasswordUtils.verify_password(password, metadata.get('password_hash')):
+                    return jsonify({
+                        "status": "error",
+                        "error": "Invalid password"
+                    }), 401
+            elif metadata.get('is_protected') == 'False':
+                pass
+            else:
+                return jsonify({
+                    "status": "error",
+                    "error": "File is protected"
+                }), 401
 
-            try :
-                if os.path.exists(file_path):
-                    os.remove(file_path)
-                    current_app.logger.info(f"✅ Deleted file: {uuid_file_name}")
-                else:
-                    current_app.logger.warning(f"File not found: {file_path}")
-            except Exception as e:
-                current_app.logger.error(f"Failed to delete: {e}")
-                # Don't fail the request!
+            if user_input_passowrd != metadata.get('password_hash'):
+                return jsonify({
+                    "status": "error",
+                    "error": "Invalid password"
+                }), 401
+            elif user_input_passowrd == metadata.get('password_hash'):
+                
+                response = send_from_directory(
+                    directory=directory_path,
+                    path=uuid_file_name,
+                    as_attachment=True,
+                    download_name=original_file_name
+                )
 
-            return response
+                
+                file_path = os.path.join(directory_path, uuid_file_name)
+
+                try :
+                    if os.path.exists(file_path):
+                        os.remove(file_path)
+                        current_app.logger.info(f"✅ Deleted file: {uuid_file_name}")
+                    else:
+                        current_app.logger.warning(f"File not found: {file_path}")
+                except Exception as e:
+                    current_app.logger.error(f"Failed to delete: {e}")
+                    # Don't fail the request!
+
+                return response
+            else:
+                return jsonify({
+                    "status": "error",
+                    "error": "Invalid password"
+                }), 401
 
         except FileNotFoundError:
             current_app.logger.error(f"File not found on disk: {uuid_file_name}")

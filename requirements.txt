@@ -1,3 +1,4 @@
 flask 
 redis
 gunicorn
+bcrypt==4.0.1

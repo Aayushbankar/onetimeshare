@@ -13,8 +13,8 @@ class RedisService:
 
     exception = redis.exceptions
     logger = logging.getLogger(__name__)
-    def __init__(self, host, port):
-        self.redis_client = redis.Redis(host=host, port=port, db=0,decode_responses=True)
+    def __init__(self, host, port, db=0):
+        self.redis_client = redis.Redis(host=host, port=port, db=db, decode_responses=True)
 
     def __check_connection(self):
 
@@ -44,6 +44,8 @@ class RedisService:
                     "real_filename":metadata['real_filename'],
                     "content_type": metadata['content_type'],
                     "upload_time": datetime.utcnow().isoformat(),
+                    "password_hash": metadata['password_hash'],
+                    "is_protected": metadata['is_protected'],
                     "TIME_TO_LIVE": str(Config.REDIS_TTL) + " seconds",
                 }) 
                 self.redis_client.expire(token,str(Config.REDIS_TTL))
