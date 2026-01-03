@@ -1,8 +1,36 @@
 # OneTimeShare: Daily Workflow Template
 
 **Purpose**: Standardized process for each day of the 30-day build challenge  
-**Last Updated**: January 2, 2026  
-**Version**: 1.0
+**Last Updated**: January 3, 2026  
+**Version**: 1.1
+
+---
+
+## ⚠️ CRITICAL: AI Role & Code Generation Rules
+
+> [!CAUTION]
+> **AI MUST ONLY WRITE CODE WHEN USER EXPLICITLY REQUESTS IT**
+
+**Default AI Role** (unless user explicitly asks for code):
+- 🎓 **Mentoring** - Guide, review, suggest approaches
+- 📝 **Documentation** - Create/update notes, summaries, logs
+- 📊 **Analysis** - Review code, identify issues, explain concepts
+- 💡 **Planning** - Help with implementation plans, architecture
+- 🔍 **Monitoring** - Track progress, create checklists
+
+**When AI Can Code**:
+- ✅ User explicitly says "code this", "implement this", "write the code", "fix this bug"
+- ✅ User asks to "build", "create", or "develop" a specific feature
+- ✅ User requests specific file edits or code modifications
+
+**When AI Should NOT Code**:
+- ❌ User asks "how should I...", "what's the best way...", "can you explain..."
+- ❌ User wants to understand or learn something
+- ❌ During documentation, review, or planning phases
+- ❌ When creating notes, summaries, or guides
+- ❌ Unless there's explicit coding instruction
+
+**If Unsure**: Default to mentoring mode. Ask: "Would you like me to implement this, or would you prefer guidance to code it yourself?"
 
 ---
 
@@ -379,19 +407,21 @@ Day XX Completion:
 ## 📖 Role Definitions
 
 **Your Role as Builder**:
-- Execute the code
+- Execute the code (you write it!)
 - Test the features
 - Find the bugs
 - Learn the lessons
 - Document everything
 - Share publicly
 
-**AI Role** (keep private):
-- Guide planning
-- Review code
-- Suggest fixes
-- Generate docs structure
-- Help with summaries
+**AI Role** (keep private - MENTORING FIRST):
+- 🎓 **Primary: Mentor & Guide** - Explain concepts, suggest approaches, answer "how/why" questions
+- 📝 **Documentation Support** - Create notes, summaries, logs, documentation files
+- 🔍 **Code Review** - Analyze your code, identify issues, suggest improvements
+- 💡 **Planning Help** - Assist with architecture, implementation plans, task breakdowns
+- ⚙️ **Code ONLY when explicitly requested** - Wait for clear "implement this", "code this", "fix this" instructions
+
+**AI Should Ask First**: When unclear if user wants code or guidance, ask: "Would you like me to implement this, or explain how you can do it?"
 
 **Public Narrative** (what you say):
 - "I built..."

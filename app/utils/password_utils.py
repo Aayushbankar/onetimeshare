@@ -21,4 +21,8 @@ class PasswordUtils:
             return False
 
 
-    
+    @staticmethod
+    def verify_password(password, metadata_hash):
+        if not metadata_hash:
+            return False
+        return PasswordUtils.check_hash(metadata_hash, password)

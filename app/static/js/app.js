@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================
     // CONFIG
     // =========================================================
-    const ALLOWED_EXTENSIONS = ['pdf', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'env'];
+    const ALLOWED_EXTENSIONS = ['pdf', 'txt', 'png', 'jpg', 'jpeg', 'gif', 'env','md'];
     const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
     
     let selectedFile = null;

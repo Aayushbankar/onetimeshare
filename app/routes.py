@@ -15,6 +15,9 @@ from app.utils.password_utils import PasswordUtils
 
 
 
+from app.utils.serve_and_delete import serve_and_delete
+
+
 bp = Blueprint('main', __name__)
 
 redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT, Config.REDIS_DB)
@@ -54,6 +57,7 @@ def upload_file():
             'token': file_name,
             'is_protected': str(is_protected),
             'password_hash': password_hash if password_hash else "",
+            'attempt_to_unlock': '0'  # ← Changed to string!
         }
         
         redis_service.store_file_metadata( file_name, metadata)
@@ -72,7 +76,8 @@ def upload_file():
 def download_file(token):
     try :
         directory_path = current_app.config['UPLOAD_FOLDER']
-        metadata = redis_service.atomic_delete(token)
+        # metadata = redis_service.atomic_delete(token)
+        metadata = redis_service.get_file_metadata(token)
 
         if not metadata:
             return jsonify({
@@ -82,8 +87,6 @@ def download_file(token):
 
         uuid_file_name = metadata.get('filename')
         original_file_name = metadata.get('real_filename')
-        user_input_passowrd = PasswordUtils.hash_password(metadata.get('password'))
-
         if not uuid_file_name or not original_file_name:
             return jsonify({
                 "status": "error",
@@ -94,69 +97,31 @@ def download_file(token):
         try :
 
             if metadata.get('is_protected') == 'True':
-                password = request.form.get('password')
-                if not password:
-                    return jsonify({
-                        "status": "error",
-                        "error": "Password is required"
-                    }), 401
-                if not PasswordUtils.verify_password(password, metadata.get('password_hash')):
-                    return jsonify({
-                        "status": "error",
-                        "error": "Invalid password"
-                    }), 401
+                return render_download_page(token)
             elif metadata.get('is_protected') == 'False':
-                pass
+                return serve_and_delete(uuid_file_name,original_file_name,directory_path,token,redis_service=redis_service)
             else:
                 return jsonify({
                     "status": "error",
                     "error": "File is protected"
                 }), 401
-
-            if user_input_passowrd != metadata.get('password_hash'):
-                return jsonify({
-                    "status": "error",
-                    "error": "Invalid password"
-                }), 401
-            elif user_input_passowrd == metadata.get('password_hash'):
-                
-                response = send_from_directory(
-                    directory=directory_path,
-                    path=uuid_file_name,
-                    as_attachment=True,
-                    download_name=original_file_name
-                )
+               
 
                 
-                file_path = os.path.join(directory_path, uuid_file_name)
-
-                try :
-                    if os.path.exists(file_path):
-                        os.remove(file_path)
-                        current_app.logger.info(f"✅ Deleted file: {uuid_file_name}")
-                    else:
-                        current_app.logger.warning(f"File not found: {file_path}")
-                except Exception as e:
-                    current_app.logger.error(f"Failed to delete: {e}")
-                    # Don't fail the request!
-
-                return response
-            else:
-                return jsonify({
-                    "status": "error",
-                    "error": "Invalid password"
-                }), 401
+            
+        
 
         except FileNotFoundError:
             current_app.logger.error(f"File not found on disk: {uuid_file_name}")
-            return jsonify({
-                "status": "error",
-                "error": "File not found on disk"
-            }), 404
+            return render_template('404.html'), 404
 
     except Exception as e:
         current_app.logger.error(f"Error in download route: {e}")
         return render_template('404.html'), 500
+
+
+
+
 
 @bp.route('/download/<token>', methods=['GET'])
 def render_download_page(token):
@@ -167,13 +132,97 @@ def render_download_page(token):
         if not metadata:
             return render_template('404.html'), 404
         
-        return render_template('dl.html', metadata=metadata, token=token)
+
+        if metadata.get('is_protected') == 'True':
+            return render_template('password.html', metadata=metadata, token=token)
+        if metadata.get('is_protected') == 'False':
+            return render_template('dl.html', metadata=metadata, token=token)
         
     except Exception as e:
         current_app.logger.error(f"Error in download page route: {e}")
         return render_template('404.html'), 500
 
 
+
+
+
+
+
+@bp.route('/verify/<token>', methods=['GET','POST'])
+def verify_token(token):
+    if request.method == 'GET':
+        try:
+            metadata = redis_service.get_file_metadata(token)
+            if not metadata:
+                return jsonify({"status": "error", "message": "File not found"}), 404
+            return jsonify({"status": "success", "metadata": metadata}), 200
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    if request.method == 'POST':
+        try:
+            # Get metadata
+            metadata = redis_service.get_file_metadata(token)
+            
+            if not metadata:
+                return render_template('404.html'), 404
+            
+            password = request.form.get('password')
+            
+            if not password:
+                return render_template('password.html',
+                                     token=token,
+                                     error="Please enter a password"), 400
+            
+            stored_hash = metadata.get('password_hash')
+            
+            # Verify password
+            if PasswordUtils.verify_password(password, stored_hash):
+                # ✅ CORRECT PASSWORD
+                # Reset attempt counter
+                metadata['attempt_to_unlock'] = '0'
+                redis_service.store_file_metadata(token, metadata)
+                
+                # Serve file
+                return serve_and_delete(
+                    metadata.get('filename'),
+                    metadata.get('real_filename'),
+                    current_app.config['UPLOAD_FOLDER'],
+                    token,
+                    redis_service=redis_service
+                )
+            
+            else:
+                # ❌ WRONG PASSWORD
+                # Increment attempt counter
+                current_attempts = int(metadata.get('attempt_to_unlock', 0))
+                current_attempts += 1
+                
+                # Save updated count to Redis
+                metadata['attempt_to_unlock'] = str(current_attempts)
+                redis_service.store_file_metadata(token, metadata)
+                
+                # Check if max retries reached
+                if current_attempts >= Config.MAX_RETRIES:
+                    # Lock the file - max retries reached
+                    return render_template('max_retries.html', 
+                                         token=token,
+                                         attempts=current_attempts), 403
+                else:
+                    # Show password form with attempts remaining
+                    remaining = Config.MAX_RETRIES - current_attempts
+                    return render_template('password.html',
+                                         token=token,
+                                         error=f"Incorrect password! {remaining} attempts remaining",
+                                         attempts_used=current_attempts,
+                                         max_attempts=Config.MAX_RETRIES), 403
+        
+        except Exception as e:
+            current_app.logger.error(f"Error in verify route: {e}")
+            return render_template('404.html'), 500
+
+
+ 
 
 
 @bp.route('/test-redis')

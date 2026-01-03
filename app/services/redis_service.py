@@ -46,6 +46,7 @@ class RedisService:
                     "upload_time": datetime.utcnow().isoformat(),
                     "password_hash": metadata['password_hash'],
                     "is_protected": metadata['is_protected'],
+                    "attempt_to_unlock": metadata.get('attempt_to_unlock', '0'),  # ← ADD THIS!
                     "TIME_TO_LIVE": str(Config.REDIS_TTL) + " seconds",
                 }) 
                 self.redis_client.expire(token,str(Config.REDIS_TTL))
@@ -268,8 +269,19 @@ class RedisService:
             
             # Check each Redis key
             for key in redis_keys:
+                # Check if key is a hash before calling hgetall()
+                key_type = self.redis_client.type(key)
+                
+                if key_type != 'hash':
+                    # Skip non-hash keys (not file metadata)
+                    continue
+                
                 # Get metadata to find filename
-                metadata = self.redis_client.hgetall(key)
+                try:
+                    metadata = self.redis_client.hgetall(key)
+                except Exception as e:
+                    self.logger.warning(f"Could not get metadata for {key}: {e}")
+                    continue
                 
                 if not metadata:
                     # Empty key, delete it

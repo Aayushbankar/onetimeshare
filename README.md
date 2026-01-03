@@ -169,13 +169,125 @@ Found through testing — files were not deleting because of wrong config refere
 
 ---
 
+## 📅 Day 7: Code Review & Testing (Dec 31, 2025)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Code Review**: Reviewed Week 1 code quality and organization.
+- [x] **Manual Testing**: Full upload → download → delete flow verification.
+- [x] **Documentation**: Created Week 1 summary and v0.1 notes.
+- [x] **Refactoring**: Cleaned up code structure and comments.
+
+### Lessons Learned
+- Weekly reviews prevent technical debt accumulation
+- Manual testing catches issues automated tests miss
+- Good documentation is an investment, not overhead
+
+---
+
+## 📅 Day 8: Atomic Operations & Concurrency (Jan 1, 2026)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Optimistic Locking**: Implemented Redis WATCH/MULTI/EXEC pattern.
+- [x] **Race Condition Prevention**: Atomic download prevents double-access.
+- [x] **Transaction Safety**: Pipeline-based operations for consistency.
+- [x] **Testing**: Concurrent download simulation scripts.
+
+### Lessons Learned
+- Redis transactions prevent race conditions
+- WATCH/MULTI/EXEC creates atomic blocks
+- Optimistic locking > pessimistic locking for this use case
+- Test concurrency explicitly, don't assume safety
+
+---
+
+## 📅 Day 9: Password Protection (Upload Phase) (Jan 2, 2026)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Bcrypt Integration**: Installed and configured password hashing.
+- [x] **PasswordUtils Class**: Created hash_password() and check_hash().
+- [x] **Redis Schema Update**: Added password_hash and is_protected fields.
+- [x] **Upload Route**: Capture and hash passwords on upload.
+- [x] **Frontend UI**: Password checkbox, input, visibility toggle.
+- [x] **Type Fixes**: Converted bool → string for Redis compatibility.
+- [x] **Docker Healthcheck**: Fixed service dependency race.
+
+### Critical Bugs Fixed
+1. Hardcoded variables instead of using calculated values
+2. Redis type error (bool → "True"/"False")
+3. Missing @staticmethod decorators
+4. Docker race condition (healthcheck added)
+
+### Lessons Learned
+- Redis only accepts: bytes, str, int, float (NOT bool or None!)
+- Variables must be USED, not just calculated
+- Docker healthchecks prevent race conditions
+- Test the complete loop, not just one half
+
+---
+
+## 📅 Day 10: Password Verification Logic (Jan 3, 2026)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Download Route Refactor**: Fixed premature deletion bug.
+- [x] **Three-Route Architecture**: `/d/<token>`, `/download/<token>`, `/verify/<token>`.
+- [x] **Password Verification**: Implemented bcrypt check on download.
+- [x] **Retry Limit System**: Max 5 attempts with Redis persistence.
+- [x] **Helper Function**: Created serve_and_delete() for reusability.
+- [x] **Templates**: password.html, max_retries.html, invalid_password.html.
+- [x] **Redis Fix**: Fixed WRONGTYPE error in cleanup function.
+
+### 26 Bugs Fixed Across 6 Passes
+- **Pass 1 (8 bugs)**: Premature deletion, GET/POST confusion, wrong function signatures
+- **Pass 2 (5 bugs)**: Variable name errors, undefined response, incomplete logic
+- **Pass 3 (4 bugs)**: Syntax errors, missing imports, missing returns
+- **Pass 4 (7 bugs)**: HTTP statelessness issue (local variable won't persist!)
+- **Pass 5 (1 bug)**: Forgot attempt_to_unlock in store_file_metadata()
+- **Pass 6 (1 bug)**: Not checking Redis key type before hgetall()
+
+### Critical Insight
+**HTTP is stateless!** Local variables reset on every request. Use Redis for cross-request persistence.
+
+```python
+# ❌ WRONG - cnt resets every request
+cnt = 0
+cnt += 1
+
+# ✅ CORRECT - persists in Redis
+attempts = int(metadata.get('attempt_to_unlock', 0))
+attempts += 1
+metadata['attempt_to_unlock'] = str(attempts)
+redis_service.store_file_metadata(token, metadata)
+```
+
+### Lessons Learned
+1. **HTTP is stateless** - Use Redis, not local variables
+2. **Test early** - Would have caught bugs sooner
+3. **Fix bugs before features** - Don't build on broken code
+4. **Redis stores strings** - Always convert types
+5. **Function signatures matter** - Update all call sites
+6. **Check key types** - Not all Redis keys are hashes
+
+### Current Security Status
+✅ **Production-Ready Password Protection:**
+- Upload with bcrypt hashing (Day 9)
+- Download with password verification (Day 10)
+- Retry limit enforcement (5 attempts max)
+- Atomic file deletion
+- Proper error handling
+
+---
+
 ## 📅 Week 2: Core Features (Jan 1 - Jan 7)
 **Focus**: One-time View Enforcement & Password Protection
 
-- **Day 8 (Jan 1)**: Refine "One-Time" logic to strictly enforce single use (atomic operations in Redis).
-- **Day 9 (Jan 2)**: Add optional Password Protection field to the Upload UI.
-- **Day 10 (Jan 3)**: Implement backend password hashing and verification for protected files.
-- **Day 11 (Jan 4)**: Create the "Enter Password" intermediate page for protected links.
+- **Day 8 (Jan 1)**: ✅ Atomic operations (completed)
+- **Day 9 (Jan 2)**: ✅ Password protection upload (completed)
+- **Day 10 (Jan 3)**: ✅ Password verification logic (completed)
+- **Day 11 (Jan 4)**: Frontend polish, analytics, edge case handling.
 - **Day 12 (Jan 5)**: Data validation (file size limits, allowed extensions).
 - **Day 13 (Jan 6)**: Improve Error Handling (404 pages for expired links, 500 pages).
 - **Day 14 (Jan 7)**: Week 2 Testing & Bug Fixes.
