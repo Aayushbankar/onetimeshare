@@ -281,15 +281,49 @@ redis_service.store_file_metadata(token, metadata)
 
 ---
 
+## 📅 Day 11: Analytics & Frontend Polish (Jan 4, 2026)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Redis Counters**: Implemented 8 analytics counters (uploads, downloads, deletions).
+- [x] **Stats Dashboard**: Created `/stats` endpoint with real-time metrics.
+- [x] **Stats JSON API**: Created `/stats-json` for AJAX refresh.
+- [x] **Protected Badge**: Shows "🔒 PASSWORD PROTECTED" on success page.
+- [x] **Copy Button**: Added clipboard copy with visual feedback toast.
+- [x] **Error Page**: Created `error.html` template for service errors.
+- [x] **Counter Reset**: Reset analytics on container startup (RDB persistence fix).
+- [x] **Navbar Update**: Added STATS link to navigation.
+
+### 5 Passes to Completion
+- **Pass 1 (C+)**: 11 bugs - counter names mismatched, strings vs ints, module-level code
+- **Pass 2 (B)**: 5 bugs - downloads/deletions not tracked, wrong key names
+- **Pass 3 (A+)**: Fixed get_counter() return type, added all tracking
+- **Pass 4 (A+)**: AI-generated frontend (stats dashboard, protected badge, copy toast)
+- **Pass 5**: Fixed Redis persistence bug (counters reset on startup)
+
+### Critical Bugs Fixed
+1. Counter names must match EXACTLY (`uploads` ≠ `upload`)
+2. Redis returns strings, not integers - always decode
+3. Module-level code runs on every reload
+4. RDB persistence preserves counters across restarts - reset needed
+
+### Lessons Learned
+1. **Counter consistency**: Set and get must use identical keys
+2. **Redis types**: Always cast to int when retrieving counters
+3. **Ephemeral data**: Reset counters on startup to avoid stale data
+4. **AI leverage**: Frontend generated in 8 minutes vs 2 hours backend debugging
+
+---
+
 ## 📅 Week 2: Core Features (Jan 1 - Jan 7)
 **Focus**: One-time View Enforcement & Password Protection
 
 - **Day 8 (Jan 1)**: ✅ Atomic operations (completed)
 - **Day 9 (Jan 2)**: ✅ Password protection upload (completed)
 - **Day 10 (Jan 3)**: ✅ Password verification logic (completed)
-- **Day 11 (Jan 4)**: Frontend polish, analytics, edge case handling.
-- **Day 12 (Jan 5)**: Data validation (file size limits, allowed extensions).
-- **Day 13 (Jan 6)**: Improve Error Handling (404 pages for expired links, 500 pages).
+- **Day 11 (Jan 4)**: ✅ Analytics & frontend polish (completed)
+- **Day 12 (Jan 5)**: Edge case handling (Redis failure, missing files).
+- **Day 13 (Jan 6)**: UI optimization & refactoring.
 - **Day 14 (Jan 7)**: Week 2 Testing & Bug Fixes.
 
 ---

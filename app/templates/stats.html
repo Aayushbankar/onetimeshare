@@ -1,0 +1,294 @@
+{% extends 'base.html' %} {% block title %}Stats | OneTimeShare{% endblock %} {%
+block styles %}
+<style>
+  /* Stats Page Specific Styles */
+  .stats-container {
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .stats-hero {
+    margin-bottom: var(--space-8);
+    text-align: center;
+  }
+
+  .stats-title {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-base);
+    letter-spacing: 2px;
+  }
+
+  .stats-subtitle {
+    font-size: 1rem;
+    color: var(--color-null);
+    margin-top: var(--space-2);
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .stat-card {
+    position: relative;
+    background-color: var(--color-card);
+    border: 3px solid var(--color-base);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .stat-value {
+    font-family: var(--font-mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-null);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Stat Card Variants */
+  .stat-card.success .stat-value {
+    color: var(--color-success);
+  }
+
+  .stat-card.warning .stat-value {
+    color: var(--color-warning);
+  }
+
+  .stat-card.error .stat-value {
+    color: var(--color-error);
+  }
+
+  /* Stats Section */
+  .stats-section {
+    background-color: var(--color-card);
+    border: 3px solid var(--color-base);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-md);
+  }
+
+  .stats-section-title {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 2px;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .stats-row:last-child {
+    border-bottom: none;
+  }
+
+  .stats-row-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--color-null);
+    letter-spacing: 1px;
+  }
+
+  .stats-row-value {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-white);
+  }
+
+  /* Live indicator */
+  .live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-success);
+    letter-spacing: 1px;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--color-success);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* Last updated */
+  .last-updated {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-null);
+    letter-spacing: 1px;
+    margin-top: var(--space-4);
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+    }
+  }
+</style>
+{% endblock %} {% block content %}
+<div class="stats-container">
+  <!-- Hero -->
+  <div class="stats-hero">
+    <h1 class="stats-title">📊 ANALYTICS</h1>
+    <p class="stats-subtitle">Real-time statistics for OneTimeShare</p>
+    <span class="live-indicator">
+      <span class="live-dot"></span>
+      LIVE DATA
+    </span>
+  </div>
+
+  <!-- Main Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card success">
+      <div class="stat-value" id="uploads">{{ stats.uploads }}</div>
+      <div class="stat-label">UPLOADS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="downloads">{{ stats.downloads }}</div>
+      <div class="stat-label">DOWNLOADS</div>
+    </div>
+    <div class="stat-card error">
+      <div class="stat-value" id="deletions">{{ stats.deletions }}</div>
+      <div class="stat-label">DELETED</div>
+    </div>
+    <div class="stat-card warning">
+      <div class="stat-value" id="protected">
+        {{ stats.protected_downloads }}
+      </div>
+      <div class="stat-label">🔒 PROTECTED</div>
+    </div>
+  </div>
+
+  <!-- Detailed Stats Section -->
+  <div class="stats-section">
+    <h2 class="stats-section-title">📈 PAGE VISITS</h2>
+    <div class="stats-row">
+      <span class="stats-row-label">Homepage Visits</span>
+      <span class="stats-row-value" id="index_visits"
+        >{{ stats.index_visits }}</span
+      >
+    </div>
+    <div class="stats-row">
+      <span class="stats-row-label">List Files API</span>
+      <span class="stats-row-value" id="list_files_visits"
+        >{{ stats.list_files_visits }}</span
+      >
+    </div>
+    <div class="stats-row">
+      <span class="stats-row-label">File Info API</span>
+      <span class="stats-row-value" id="info_visits"
+        >{{ stats.info_visits }}</span
+      >
+    </div>
+  </div>
+
+  <!-- Download Breakdown -->
+  <div class="stats-section">
+    <h2 class="stats-section-title">🔐 DOWNLOAD BREAKDOWN</h2>
+    <div class="stats-row">
+      <span class="stats-row-label">Protected Downloads</span>
+      <span class="stats-row-value">🔒 {{ stats.protected_downloads }}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-row-label">Public Downloads</span>
+      <span class="stats-row-value">🌐 {{ stats.unprotected_downloads }}</span>
+    </div>
+    <div class="stats-row">
+      <span class="stats-row-label">Total Completed</span>
+      <span class="stats-row-value" style="color: var(--color-success)"
+        >{{ stats.downloads }}</span
+      >
+    </div>
+  </div>
+
+  <p class="last-updated">Last updated: <span id="timestamp"></span></p>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // Update timestamp
+  document.getElementById("timestamp").textContent =
+    new Date().toLocaleString();
+
+  // Auto-refresh stats every 30 seconds
+  setInterval(async () => {
+    try {
+      const response = await fetch("/stats-json");
+      const stats = await response.json();
+
+      // Update values with animation
+      const updateValue = (id, value) => {
+        const el = document.getElementById(id);
+        if (el && el.textContent !== String(value)) {
+          el.style.transform = "scale(1.2)";
+          el.textContent = value;
+          setTimeout(() => (el.style.transform = "scale(1)"), 200);
+        }
+      };
+
+      updateValue("uploads", stats.uploads);
+      updateValue("downloads", stats.downloads);
+      updateValue("deletions", stats.deletions);
+      updateValue("protected", stats.protected_downloads);
+      updateValue("index_visits", stats.index_visits);
+      updateValue("list_files_visits", stats.list_files_visits);
+      updateValue("info_visits", stats.info_visits);
+
+      document.getElementById("timestamp").textContent =
+        new Date().toLocaleString();
+    } catch (e) {
+      console.error("Failed to refresh stats:", e);
+    }
+  }, 30000);
+</script>
+{% endblock %}

@@ -19,7 +19,8 @@ def serve_and_delete(uuid_file_name,original_file_name,directory_path,token,redi
                 )
     redis_service.atomic_delete(token)
     file_path = os.path.join(directory_path, uuid_file_name)
-
+    redis_service.increment_counter("downloads", 1)
+    redis_service.increment_counter("deletions", 1)
     try :
         if os.path.exists(file_path):
             os.remove(file_path)

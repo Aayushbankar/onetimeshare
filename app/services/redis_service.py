@@ -319,3 +319,47 @@ class RedisService:
                 "success": False,
                 "error": str(e)
             }
+
+
+
+
+    def increment_counter(self,key,count):
+        """Increment counter by 1"""
+        try :
+            if not self.__check_connection():
+                return False
+            self.redis_client.incrby(key,count)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error incrementing counter: {e}")   
+            return False
+    def decrement_counter(self,key,count):
+        """Decrement counter by 1"""
+        try :
+            if not self.__check_connection():
+                return False
+            self.redis_client.decrby(key,count)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error decrementing counter: {e}")   
+            return False
+
+    def set_counter(self, counter_name, value):
+        """Set counter to specific value"""
+        try :
+            if not self.__check_connection():
+                return False
+            self.redis_client.set(counter_name, value)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error setting counter: {e}")   
+            return False
+
+    def get_counter(self, counter_name):
+        try:
+            if not self.__check_connection():
+                return 0
+            value = self.redis_client.get(counter_name)
+            return int(value) if value else 0
+        except:
+            return 0

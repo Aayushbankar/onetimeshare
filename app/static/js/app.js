@@ -213,7 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Handle result
             if (data.status === 'success') {
                 const link = window.location.origin + '/download/' + data.metadata.token;
-                showSuccess(link);
+                const isProtected = data.metadata.is_protected === 'True';
+                showSuccess(link, isProtected);
             } else {
                 showError(data.message || 'Upload failed');
             }
@@ -226,10 +227,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // UI STATE FUNCTIONS
     // =========================================================
     
-    function showSuccess(link) {
+    function showSuccess(link, isProtected = false) {
         uploadSection.classList.add('hidden');
         successSection.classList.remove('hidden');
         shareLink.value = link;
+        
+        // Show/hide protected badge
+        const protectedBadge = document.getElementById('protected-badge');
+        if (protectedBadge) {
+            if (isProtected) {
+                protectedBadge.classList.remove('hidden');
+            } else {
+                protectedBadge.classList.add('hidden');
+            }
+        }
     }
 
     function showError(message) {
@@ -258,6 +269,21 @@ document.addEventListener('DOMContentLoaded', () => {
         progressFill.style.width = '0%';
         progressText.textContent = '0%';
         progressContainer.classList.add('hidden');
+        
+        // Reset password field
+        if (usePassword) {
+            usePassword.checked = false;
+            passwordContainer.classList.add('hidden');
+            filePassword.value = '';
+        }
+        
+        // Hide protected badge
+        const protectedBadge = document.getElementById('protected-badge');
+        if (protectedBadge) protectedBadge.classList.add('hidden');
+        
+        // Hide copy toast
+        const copyToast = document.getElementById('copy-toast');
+        if (copyToast) copyToast.classList.add('hidden');
     }
 
     // =========================================================
@@ -266,16 +292,31 @@ document.addEventListener('DOMContentLoaded', () => {
     copyBtn.addEventListener('click', async () => {
         try {
             await navigator.clipboard.writeText(shareLink.value);
-            copyBtn.textContent = '✓ COPIED!';
-            setTimeout(() => { copyBtn.textContent = '📋 COPY'; }, 2000);
+            showCopySuccess();
         } catch (err) {
             // Fallback for older browsers
             shareLink.select();
             document.execCommand('copy');
-            copyBtn.textContent = '✓ COPIED!';
-            setTimeout(() => { copyBtn.textContent = '📋 COPY'; }, 2000);
+            showCopySuccess();
         }
     });
+    
+    function showCopySuccess() {
+        const copyBtnText = document.getElementById('copy-btn-text');
+        const copyToast = document.getElementById('copy-toast');
+        
+        // Update button text
+        if (copyBtnText) {
+            copyBtnText.textContent = '✓ COPIED!';
+            setTimeout(() => { copyBtnText.textContent = '📋 COPY'; }, 2000);
+        }
+        
+        // Show toast
+        if (copyToast) {
+            copyToast.classList.remove('hidden');
+            setTimeout(() => { copyToast.classList.add('hidden'); }, 2000);
+        }
+    }
 
     // =========================================================
     // RESET HANDLERS

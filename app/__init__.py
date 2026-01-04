@@ -16,6 +16,8 @@ def create_app(test_config=None):
     app.config.from_object(CONFIG)
     app.register_blueprint(routes.bp)
     
+    
+    
     with app.app_context():
         from app.services.redis_service import RedisService
         from config import Config
@@ -29,6 +31,17 @@ def create_app(test_config=None):
         # Clean up orphaned metadata (metadata without files)
         metadata_result = redis_service.cleanup_orphan_metadata()
         app.logger.info(f"Startup metadata cleanup: {metadata_result}")
+        
+        # Reset analytics counters on startup (prevent stale data from Redis persistence)
+        analytics_counters = [
+            "uploads", "downloads", "deletions",
+            "index_visits", "list_files_visits", "info_visits",
+            "protected_downloads", "unprotected_downloads"
+        ]
+        for counter in analytics_counters:
+            redis_service.set_counter(counter, 0)
+        app.logger.info(f"Startup analytics reset: {len(analytics_counters)} counters reset to 0")
 
     
     return app
+

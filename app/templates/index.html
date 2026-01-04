@@ -105,11 +105,25 @@
     <div id="success-section" class="hidden">
       <div class="success-icon">✓</div>
       <h2 class="success-title">FILE UPLOADED</h2>
+      
+      <!-- Protected Badge (shown if file was password protected) -->
+      <div id="protected-badge" class="protected-badge hidden">
+        <span class="badge-icon">🔒</span>
+        <span class="badge-text">PASSWORD PROTECTED</span>
+      </div>
+      
       <p class="success-subtitle">Your one-time download link:</p>
 
       <div class="link-container">
         <input type="text" id="share-link" class="share-link" readonly />
-        <button id="copy-btn" class="btn btn-primary">📋 COPY</button>
+        <button id="copy-btn" class="btn btn-primary" onclick="copyLink()">
+          <span id="copy-btn-text">📋 COPY</span>
+        </button>
+      </div>
+      
+      <!-- Copy Success Toast -->
+      <div id="copy-toast" class="copy-toast hidden">
+        ✓ Link copied to clipboard!
       </div>
 
       <div class="warning-box">
