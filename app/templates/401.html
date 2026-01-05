@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}401 - Unauthorized{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <div class="error-container">
+        <h1 class="error-code">401</h1>
+        <h2 class="error-title">Unauthorized</h2>
+        <p class="error-message">You need to authenticate to access this resource.</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary mt-3">Return to Homepage</a>
+    </div>
+</div>
+
+<style>
+.error-container { padding: 60px 20px; }
+.error-code { font-size: 8rem; font-weight: 700; color: #6c757d; margin-bottom: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+.error-title { font-size: 2rem; color: #ff6b35; margin-bottom: 20px; }
+.error-message { font-size: 1.2rem; color: #aaa; max-width: 500px; margin: 0 auto 30px; }
+</style>
+{% endblock %}

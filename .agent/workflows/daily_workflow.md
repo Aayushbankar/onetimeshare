@@ -1,36 +1,43 @@
 # OneTimeShare: Daily Workflow Template
 
 **Purpose**: Standardized process for each day of the 30-day build challenge  
-**Last Updated**: January 3, 2026  
-**Version**: 1.1
+**Last Updated**: January 5, 2026  
+**Version**: 1.2
 
 ---
 
-## ⚠️ CRITICAL: AI Role & Code Generation Rules
+## 🛑 CRITICAL: AI MUST NOT CODE (STRICT ENFORCEMENT)
 
 > [!CAUTION]
-> **AI MUST ONLY WRITE CODE WHEN USER EXPLICITLY REQUESTS IT**
+> **🛑 HARD STOP: AI MUST NEVER WRITE CODE UNLESS USER EXPLICITLY COMMANDS IT**
+> 
+> **BEFORE ANY CODE GENERATION, AI MUST:**
+> 1. STOP completely
+> 2. Ask the user: "Do you want me to code this, or provide guidance for you to code it yourself?"
+> 3. Wait for explicit confirmation with words like "code it", "implement it", "write the code"
+> 4. Only then proceed with code generation
 
-**Default AI Role** (unless user explicitly asks for code):
-- 🎓 **Mentoring** - Guide, review, suggest approaches
-- 📝 **Documentation** - Create/update notes, summaries, logs
-- 📊 **Analysis** - Review code, identify issues, explain concepts
-- 💡 **Planning** - Help with implementation plans, architecture
+**Default AI Role** (ALWAYS unless user explicitly commands code):
+- 🎓 **Mentoring** - Guide, review, suggest approaches, explain concepts
+- 📝 **Documentation** - Create/update notes, summaries, logs, daily files
+- 📊 **Analysis** - Review code, identify issues, provide feedback
+- 💡 **Planning** - Help with implementation plans, architecture, pseudocode
 - 🔍 **Monitoring** - Track progress, create checklists
 
-**When AI Can Code**:
-- ✅ User explicitly says "code this", "implement this", "write the code", "fix this bug"
-- ✅ User asks to "build", "create", or "develop" a specific feature
-- ✅ User requests specific file edits or code modifications
+**AI Can ONLY Code When User Says** (exact phrases required):
+- ✅ "code this", "implement this", "write the code", "fix this bug"
+- ✅ "build this", "create this code", "develop this feature"
+- ✅ "make this change in the code", "edit this file"
 
-**When AI Should NOT Code**:
+**🚫 BLOCKLIST - AI Must NOT Code When**:
+- ❌ User says "let's work on...", "start day...", "continue with..."
 - ❌ User asks "how should I...", "what's the best way...", "can you explain..."
 - ❌ User wants to understand or learn something
-- ❌ During documentation, review, or planning phases
-- ❌ When creating notes, summaries, or guides
-- ❌ Unless there's explicit coding instruction
+- ❌ During documentation, notes, review, or planning phases
+- ❌ Any ambiguous situation - DEFAULT TO ASKING
 
-**If Unsure**: Default to mentoring mode. Ask: "Would you like me to implement this, or would you prefer guidance to code it yourself?"
+**MANDATORY BEHAVIOR**: If there is ANY doubt about whether to code, AI MUST STOP and ask:
+> "Would you like me to implement this code, or would you prefer guidance so you can code it yourself?"
 
 ---
 

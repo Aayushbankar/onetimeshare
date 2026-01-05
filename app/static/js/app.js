@@ -200,15 +200,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: formData
             });
 
-            // Parse response
-            const data = await response.json();
-
             // Complete progress
             progressFill.style.width = '100%';
             progressText.textContent = '100%';
 
             // Small delay for visual feedback
             await new Promise(resolve => setTimeout(resolve, 300));
+
+            // Handle error responses (non-2xx status codes)
+            if (!response.ok) {
+                // Server returned an error - redirect to error page
+                window.location.href = `/error/${response.status}`;
+                return;
+            }
+
+            // Parse successful JSON response
+            const data = await response.json();
 
             // Handle result
             if (data.status === 'success') {

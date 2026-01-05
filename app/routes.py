@@ -12,36 +12,52 @@ from flask import send_from_directory
 import re 
 
 from app.utils.password_utils import PasswordUtils
-
+from functools import wraps
 
 
 from app.utils.serve_and_delete import serve_and_delete
 
 
+def handle_redis_error(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        try:
+            return fn(*args, **kwargs)
+
+        except redis.exceptions.ConnectionError as e:
+            current_app.logger.error(f"Redis connection error: {e}")
+            return jsonify({"error": "Redis connection error"}), 503
+
+        except redis.exceptions.TimeoutError as e:
+            current_app.logger.error(f"Redis timeout error: {e}")
+            return jsonify({"error": "Redis timeout error"}), 504
+
+        except redis.exceptions.ResponseError as e:
+            current_app.logger.error(f"Redis response error: {e}")
+            return jsonify({"error": "Redis response error"}), 500
+
+        except redis.exceptions.WatchError as e:
+            current_app.logger.error(f"Redis watch error: {e}")
+            return jsonify({"error": "Redis watch error"}), 500
+
+
+        except redis.RedisError as e:
+            current_app.logger.error(f"Redis error: {e}")
+            return jsonify({"error": "Redis error"}), 500
+
+        except Exception as e:
+            current_app.logger.error(f"Error: {e}")
+            return jsonify({"error": "Internal server error"}), 500
+    return wrapper
 bp = Blueprint('main', __name__)
 
+
+
+
+
+
+
 redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT, Config.REDIS_DB)
-
-# redis_service.set_counter("file_count",0)
-# redis_service.set_counter("uploads",0)
-# redis_service.set_counter("downloads",0)
-# redis_service.set_counter("deletions",0)
-
-
-    
-# redis_service.set_counter("/ - visits ",0)
-# redis_service.set_counter("/upload - visits ",0)
-# redis_service.set_counter("/download - visits ",0)
-# redis_service.set_counter("/download - protected - visits ",0)
-# redis_service.set_counter("/download - unprotected - visits ",0)
-# redis_service.set_counter("/download - 404 - visits ",0)
-# redis_service.set_counter("/download - 500 - visits ",0)
-# redis_service.set_counter("/list-files - visits ",0)
-# redis_service.set_counter("/info - visits ",0)
-
-
-
-
 
 
 
@@ -53,15 +69,15 @@ def index():
 
 
 @bp.route('/upload', methods=['POST'])
+@handle_redis_error
 def upload_file():  
-    try :
         # step 1 : file sanitation , genrating uuid and saving file
         file = request.files['file']
         file_name, filepath = generate_uuid_and_filepath(file)
         os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True) 
         file.save(filepath)
 
-
+ 
         # step 1.1 check if the user has kept the passowrd settin gturned on / off 
         password = request.form.get('password')
         password_hash = None
@@ -92,15 +108,13 @@ def upload_file():
         else:
             return jsonify({"status": "error", "message": "Failed to upload file"}), 500
 
-        
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 
 @bp.route('/d/<token>', methods=['GET'])
+@handle_redis_error
 def download_file(token):
-    try :
+
         directory_path = current_app.config['UPLOAD_FOLDER']
         # metadata = redis_service.atomic_delete(token)
         metadata = redis_service.get_file_metadata(token)
@@ -141,41 +155,38 @@ def download_file(token):
 
         except FileNotFoundError:
             current_app.logger.error(f"File not found on disk: {uuid_file_name}")
+            redis_service.delete_metadata(token)
             return render_template('404.html'), 404
 
-    except Exception as e:
-        current_app.logger.error(f"Error in download route: {e}")
-        return render_template('404.html'), 500
+
 
 
 
 
 
 @bp.route('/download/<token>', methods=['GET'])
+@handle_redis_error
 def render_download_page(token):
     """Render the download page with file metadata."""
     # redis_service.increment_counter("/download - visits ",1)
-    try:
-        metadata = redis_service.get_file_metadata(token)
-        
-        if not metadata:
 
-            # redis_service.increment_counter("/download - 404 - visits ",1)
-            return render_template('404.html'), 404
-        
+    metadata = redis_service.get_file_metadata(token)
+    
+    if not metadata:
 
-        if metadata.get('is_protected') == 'True':
-            # redis_service.increment_counter("/download - protected - visits ",1)
-            redis_service.increment_counter("protected_downloads_visits",1)
-            return render_template('password.html', metadata=metadata, token=token)
-        if metadata.get('is_protected') == 'False':
-            # redis_service.increment_counter("/download - unprotected - visits ",1)
-            redis_service.increment_counter("unprotected_downloads_visits",1)
-            return render_template('dl.html', metadata=metadata, token=token)
-        
-    except Exception as e:
-        current_app.logger.error(f"Error in download page route: {e}")
-        return render_template('404.html'), 500
+        # redis_service.increment_counter("/download - 404 - visits ",1)
+        return render_template('404.html'), 404
+    
+
+    if metadata.get('is_protected') == 'True':
+        # redis_service.increment_counter("/download - protected - visits ",1)
+        redis_service.increment_counter("protected_downloads_visits",1)
+        return render_template('password.html', metadata=metadata, token=token)
+    if metadata.get('is_protected') == 'False':
+        # redis_service.increment_counter("/download - unprotected - visits ",1)
+        redis_service.increment_counter("unprotected_downloads_visits",1)
+        return render_template('dl.html', metadata=metadata, token=token)
+    
 
 
 
@@ -184,18 +195,18 @@ def render_download_page(token):
 
 
 @bp.route('/verify/<token>', methods=['GET','POST'])
+@handle_redis_error
 def verify_token(token):
     if request.method == 'GET':
-        try:
+
             metadata = redis_service.get_file_metadata(token)
             if not metadata:
                 return jsonify({"status": "error", "message": "File not found"}), 404
             return jsonify({"status": "success", "metadata": metadata}), 200
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
+
 
     if request.method == 'POST':
-        try:
+
             # Get metadata
             metadata = redis_service.get_file_metadata(token)
             
@@ -253,37 +264,26 @@ def verify_token(token):
                                          attempts_used=current_attempts,
                                          max_attempts=Config.MAX_RETRIES), 403
         
-        except Exception as e:
-            current_app.logger.error(f"Error in verify route: {e}")
-            return render_template('404.html'), 500
 
 
- 
 
 
-@bp.route('/test-redis')
-def test_redis():
-    try:
-        r = current_app.redis_client
-        hits = r.incr('hit_counter')
-        return f"Hello! This page has been seen {hits} times. Redis is ALIVE."
-    except Exception as e:
-        return f"Redis Error: {str(e)}"
 
-
+# TODO: Add admin authentication before Day 13
+# These routes should only be accessible by CLI-generated admin token
 @bp.route('/list-files', methods=['GET'])
+@handle_redis_error
 def list_files():
-   try :
-    if redis_service.list_files():
-        # redis_service.increment_counter("/list-files - visits ",1)
-        redis_service.increment_counter("list_files_visits",1)
-        return jsonify({"status": "success", "files": redis_service.list_files()}), 200
-    elif redis_service.list_files() is None:
-        return jsonify({"status": "error", "message": "no files in the db"}), 200
+    """Debug endpoint to list all files. TODO: Protect with admin auth."""
+    files = redis_service.list_files()
+    if files:
+        redis_service.increment_counter("list_files_visits", 1)
+        return jsonify({"status": "success", "files": files}), 200
+    elif files is None or len(files) == 0:
+        return jsonify({"status": "success", "message": "No files in the db", "files": []}), 200
     else:
         return jsonify({"status": "error", "message": "Failed to list files"}), 500
-   except Exception as e:
-        return jsonify({"error": str(e)}), 500
+
 
 
 @bp.route('/info/<token>', methods=['GET'])
@@ -298,30 +298,6 @@ def file_info(token):
         return jsonify({"error": str(e)}), 500
         
 
-@bp.route('/admin/cleanup', methods=['POST'])
-def cleanup_orphans():
-    """
-    Admin endpoint to clean up orphaned files.
-    Deletes files that exist on disk but have no Redis metadata.
-    """
-    try:
-        result = redis_service.cleanup_orphan_files()
-        return jsonify(result), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@bp.route('/admin/cleanup-metadata', methods=['POST'])
-def cleanup_orphan_metadata():
-    """
-    Admin endpoint to clean up orphaned Redis metadata.
-    Deletes Redis keys that have no corresponding file on disk.
-    """
-    try:
-        result = redis_service.cleanup_orphan_metadata()
-        return jsonify(result), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 # Flask error handlers
 @bp.app_errorhandler(404)
@@ -333,7 +309,24 @@ def page_not_found(e):
 def internal_server_error(e):
     """Handle 500 errors globally."""
     current_app.logger.error(f"Internal server error: {e}")
-    return render_template('404.html'), 500
+    return render_template('500.html'), 500
+
+# Error page route for JS redirects
+@bp.route('/error/<int:code>')
+def error_page(code):
+    """Render error page for given status code."""
+    templates = {
+        400: '400.html',
+        401: '401.html', 
+        403: '403.html',
+        404: '404.html',
+        410: '410.html',
+        500: '500.html',
+        503: '503.html',
+        504: '504.html'
+    }
+    template = templates.get(code, '500.html')
+    return render_template(template), code
 
 @bp.route('/stats')
 def stats():
@@ -343,6 +336,7 @@ def stats():
 
 
 @bp.route('/stats-json')
+@handle_redis_error
 def stats_json():
     """Return stats as JSON for API/AJAX refresh"""
     return jsonify(_get_stats_data())
