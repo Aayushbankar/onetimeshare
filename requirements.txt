@@ -2,3 +2,7 @@ flask
 redis
 gunicorn
 bcrypt==4.0.1
+python-dotenv
+
+flask-login
+flask-jwt-extended

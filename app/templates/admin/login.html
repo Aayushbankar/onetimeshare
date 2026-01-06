@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Admin Login | OneTimeShare{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <div class="hero">
+        <h1 class="hero-title">ADMIN <span class="hero-accent">LOGIN</span></h1>
+        <p class="hero-subtitle">Restricted access area</p>
+    </div>
+    
+    <div class="containment-card">
+        <div class="screw screw-tl"></div>
+        <div class="screw screw-tr"></div>
+        <div class="screw screw-bl"></div>
+        <div class="screw screw-br"></div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {# Only show the LAST message, not all accumulated ones #}
+                {% set category, message = messages[-1] %}
+                <div class="alert-box alert-{{ category }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" class="login-form">
+            <div class="form-group">
+                <label class="form-label" for="username">USERNAME</label>
+                <input type="text" name="username" id="username" class="form-input" placeholder="Enter username" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label" for="password">PASSWORD</label>
+                <input type="password" name="password" id="password" class="form-input" placeholder="Enter password" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large">
+                🔐 AUTHENTICATE
+            </button>
+        </form>
+        
+        <div class="helper-text">
+            <p>🔒 SECURE ADMIN ACCESS ONLY</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -322,9 +322,75 @@ redis_service.store_file_metadata(token, metadata)
 - **Day 9 (Jan 2)**: ✅ Password protection upload (completed)
 - **Day 10 (Jan 3)**: ✅ Password verification logic (completed)
 - **Day 11 (Jan 4)**: ✅ Analytics & frontend polish (completed)
-- **Day 12 (Jan 5)**: Edge case handling (Redis failure, missing files).
-- **Day 13 (Jan 6)**: UI optimization & refactoring.
+- **Day 12 (Jan 5)**: ✅ Edge case handling (completed)
+- **Day 13 (Jan 6)**: ✅ Admin authentication (completed)
 - **Day 14 (Jan 7)**: Week 2 Testing & Bug Fixes.
+
+---
+
+## 📅 Day 12: Edge Case Handling & Security (Jan 5, 2026)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Redis Error Handler**: `@handle_redis_error` decorator with comprehensive error catching.
+- [x] **Custom Error Pages**: Created 503.html, 500.html for graceful failures.
+- [x] **Security Audit**: Removed unsafe `/admin` and `/test-redis` routes.
+- [x] **Frontend Error Handling**: JS redirects to error pages.
+- [x] **Config Fix**: Synchronized MAX_CONTENT_LENGTH to 20MB.
+
+### Lessons Learned
+- `@wraps(f)` is required for Flask decorators
+- Configuration should be Single Source of Truth
+- Test like a user, not a developer
+
+---
+
+## 📅 Day 13: Admin Authentication (Jan 6, 2026)
+**Status**: ✅ Completed
+
+### The Pivot
+Started with SQLAlchemy database approach, then realized config-based auth is simpler for single-admin apps.
+
+### Key Features Built
+- **Config-Based Auth**: Admin credentials in `.env` file
+- **Flask-Login**: Browser session management
+- **JWT Support**: API token authentication
+- **@admin_required Decorator**: Protects admin routes
+- **Auto-Logout Security**: Session expires when leaving admin routes
+- **Admin Dashboard**: Stats, file list, navigation
+- **Zero-Knowledge Privacy**: Admins see tokens, not filenames
+
+### Files Created
+```
+NEW:
+├── app/auth/
+│   ├── __init__.py
+│   ├── routes.py        # Login, logout, dashboard
+│   ├── decorators.py    # @admin_required
+│   └── admin_user.py    # Simple user class
+├── app/templates/admin/
+│   ├── login.html
+│   ├── dashboard.html
+│   └── list_files.html
+└── .env.example
+
+MODIFIED:
+├── config.py            # ADMIN_USERNAME, ADMIN_PASSWORD
+├── app/__init__.py      # Flask-Login, auto-logout
+├── app/routes.py        # @admin_required on routes
+├── docker-compose.yml   # Env vars, volumes, retry
+└── requirements.txt     # flask-login, flask-jwt-extended
+```
+
+### Time Analysis
+- **Total**: 4h 20min (11:30-12:20 + 13:30-17:00)
+- **6 Passes**: C → B+ → A → B → A → A
+- **Key Insight**: 2h "wasted" on SQLAlchemy, but valuable learning
+
+### Lessons Learned
+- Ask "What's the simplest solution?" before choosing technology
+- Circular imports happen — keep shared code in separate modules
+- Docker services may start before network DNS is ready — add retry logic
 
 ---
 

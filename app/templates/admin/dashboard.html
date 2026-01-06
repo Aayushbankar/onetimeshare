@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard | OneTimeShare{% endblock %}
+
+{% block content %}
+<div class="page-container admin-dashboard">
+    <div class="hero">
+        <h1 class="hero-title">ADMIN <span class="hero-accent">DASHBOARD</span></h1>
+        <p class="hero-subtitle">Welcome, {{ current_user.username }}</p>
+    </div>
+    
+    <div class="containment-card">
+        <div class="screw screw-tl"></div>
+        <div class="screw screw-tr"></div>
+        <div class="screw screw-bl"></div>
+        <div class="screw screw-br"></div>
+        
+        <!-- Zero-Knowledge Notice -->
+        <div class="privacy-notice">
+            <span class="privacy-icon">🔐</span>
+            <div class="privacy-text">
+                <strong>ZERO-KNOWLEDGE MODE</strong>
+                <p>Original filenames and content are not visible to admins</p>
+            </div>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-value" id="total-uploads">--</span>
+                <span class="stat-label">UPLOADS</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="total-downloads">--</span>
+                <span class="stat-label">DOWNLOADS</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="index-visits">--</span>
+                <span class="stat-label">PAGE VISITS</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="protected-downloads">--</span>
+                <span class="stat-label">PROTECTED DL</span>
+            </div>
+        </div>
+        
+        <!-- Navigation Cards -->
+        <div class="admin-nav">
+            <a href="{{ url_for('main.stats') }}" class="nav-card">
+                <span class="nav-icon">📊</span>
+                <span class="nav-title">ALL STATS</span>
+            </a>
+            <a href="{{ url_for('main.list_files') }}" class="nav-card">
+                <span class="nav-icon">📁</span>
+                <span class="nav-title">LIST FILES</span>
+            </a>
+            <a href="{{ url_for('main.index') }}" class="nav-card">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-title">HOME PAGE</span>
+            </a>
+            <a href="{{ url_for('auth.logout') }}" class="nav-card nav-card-danger">
+                <span class="nav-icon">🚪</span>
+                <span class="nav-title">LOGOUT</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Load stats via API
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('{{ url_for("main.stats_json") }}')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('total-uploads').textContent = data.uploads || 0;
+            document.getElementById('total-downloads').textContent = data.downloads || 0;
+            document.getElementById('index-visits').textContent = data.index_visits || 0;
+            document.getElementById('protected-downloads').textContent = data.protected_downloads || 0;
+        })
+        .catch(err => console.log('Stats unavailable'));
+});
+</script>
+{% endblock %}

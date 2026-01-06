@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}File List | Admin | OneTimeShare{% endblock %}
+
+{% block content %}
+<div class="page-container admin-dashboard">
+    <div class="hero">
+        <h1 class="hero-title">FILE <span class="hero-accent">LIST</span></h1>
+        <p class="hero-subtitle">{{ count }} active files</p>
+    </div>
+    
+    <div class="containment-card">
+        <div class="screw screw-tl"></div>
+        <div class="screw screw-tr"></div>
+        <div class="screw screw-bl"></div>
+        <div class="screw screw-br"></div>
+        
+        <!-- Zero-Knowledge Notice -->
+        <div class="privacy-notice">
+            <span class="privacy-icon">🔐</span>
+            <div class="privacy-text">
+                <strong>ZERO-KNOWLEDGE MODE</strong>
+                <p>Original filenames hidden for privacy</p>
+            </div>
+        </div>
+        
+        {% if files %}
+        <div class="file-list">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>TOKEN</th>
+                        <th>TYPE</th>
+                        <th>PROTECTED</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                    <tr>
+                        <td class="token-cell">{{ file.token[:12] }}...</td>
+                        <td>{{ file.type }}</td>
+                        <td>
+                            {% if file.protected == 'True' %}
+                            <span class="badge badge-protected">🔒 YES</span>
+                            {% else %}
+                            <span class="badge badge-open">🔓 NO</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <span class="empty-icon">📭</span>
+            <p>No files currently stored</p>
+        </div>
+        {% endif %}
+        
+        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-secondary btn-large">
+            ← BACK TO DASHBOARD
+        </a>
+    </div>
+</div>
+{% endblock %}

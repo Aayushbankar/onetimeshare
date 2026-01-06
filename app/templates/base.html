@@ -27,7 +27,12 @@
                 </a>
             </div>
             <div class="navbar-links">
-                <a href="{{ url_for('main.stats') }}" class="nav-link">STATS</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.dashboard') }}" class="nav-link nav-link-admin">🛡️ ADMIN</a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-link">LOGOUT</a>
+                {% else %}
+                    <a href="{{ url_for('main.index') }}" class="nav-link">HOME</a>
+                {% endif %}
                 <a href="https://github.com/Aayushbankar/onetimeshare" target="_blank" class="nav-link">GITHUB</a>
             </div>
         </nav>

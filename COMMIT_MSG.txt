@@ -1,0 +1,41 @@
+Day 13: Admin Authentication & Zero-Knowledge Privacy
+
+The Pivot:
+- Started with SQLAlchemy database approach (2h 43m)
+- Realized config-based auth is simpler for single-admin
+- Deleted everything and rebuilt in 8 minutes
+
+Features:
+- Config-based admin auth (credentials in .env)
+- Flask-Login for browser session management
+- Flask-JWT-Extended for API token authentication
+- @admin_required decorator for route protection
+- Admin dashboard with live stats
+- File list page (anonymized tokens only)
+- Auto-logout when leaving /admin routes (security)
+- Zero-knowledge privacy: admins cannot see filenames
+
+Security:
+- Session expires on non-admin route access
+- Protected /stats and /list-files routes
+- JWT + session dual authentication support
+
+Infrastructure:
+- Updated docker-compose.yml with env vars and volumes
+- Added Redis connection retry logic for Docker startup
+- Cleaned up unused files (models/admin.py, scripts/)
+
+Fixes:
+- Fixed circular import (moved AdminUser to own module)
+- Fixed Redis WRONGTYPE error in list_files
+- Fixed stats route protection
+- Fixed flash message accumulation on login
+
+Documentation:
+- 16 learning guides in notes_ai/Day_13/
+- 5 pass mistake logs
+- Textbook-style code explanation
+- Day 13 detailed summary
+
+Time: 4h 20min (11:30-12:20 + 13:30-17:00)
+Passes: 6 | Bugs: 12 | Grade: C → B+ → A → B → A → A

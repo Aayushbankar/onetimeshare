@@ -13,6 +13,7 @@ import re
 
 from app.utils.password_utils import PasswordUtils
 from functools import wraps
+from app.auth.decorators import admin_required
 
 
 from app.utils.serve_and_delete import serve_and_delete
@@ -133,6 +134,14 @@ def download_file(token):
                 "error": "Invalid metadata"
             }), 500
 
+        # 🔒 BUG FIX: Check if max retries reached BEFORE allowing access
+        # This prevents users from bypassing the lock by revisiting the URL
+        if metadata.get('is_protected') == 'True':
+            attempts = int(metadata.get('attempt_to_unlock', 0))
+            if attempts >= Config.MAX_RETRIES:
+                current_app.logger.warning(f"Blocked access to locked file: {token} (attempts: {attempts})")
+                return render_template('max_retries.html', token=token), 403
+
         
         try :
 
@@ -251,7 +260,12 @@ def verify_token(token):
                 
                 # Check if max retries reached
                 if current_attempts >= Config.MAX_RETRIES:
-                    # Lock the file - max retries reached
+                    # 🔒 SECURITY UPDATED (Pass 3):
+                    # We DO NOT delete the file here. Doing so would create a DoS vector
+                    # where an attacker could brute-force delete files they don't own.
+                    # Instead, we just lock it (Prevented by the check at route start).
+                    current_app.logger.warning(f"Max retries reached for: {token}. File locked.")
+                    
                     return render_template('max_retries.html', 
                                          token=token,
                                          attempts=current_attempts), 403
@@ -269,24 +283,42 @@ def verify_token(token):
 
 
 
-# TODO: Add admin authentication before Day 13
-# These routes should only be accessible by CLI-generated admin token
+# Admin-protected routes (Day 13)
 @bp.route('/list-files', methods=['GET'])
+@admin_required
 @handle_redis_error
 def list_files():
-    """Debug endpoint to list all files. TODO: Protect with admin auth."""
-    files = redis_service.list_files()
-    if files:
-        redis_service.increment_counter("list_files_visits", 1)
-        return jsonify({"status": "success", "files": files}), 200
-    elif files is None or len(files) == 0:
-        return jsonify({"status": "success", "message": "No files in the db", "files": []}), 200
-    else:
-        return jsonify({"status": "error", "message": "Failed to list files"}), 500
+    """Admin page to list all files (anonymized)."""
+    result = redis_service.list_files()
+    redis_service.increment_counter("list_files_visits", 1)
+    
+    # Get file tokens from redis keys
+    tokens = result.get('redis_keys', []) if isinstance(result, dict) else []
+    
+    # Anonymize files for zero-knowledge
+    anonymized = []
+    for token in tokens:
+        # Skip counter keys and other non-file keys
+        if not token or '_' in token or len(token) < 32:
+            continue
+        try:
+            metadata = redis_service.get_file_metadata(token)
+            if metadata and isinstance(metadata, dict):
+                anonymized.append({
+                    'token': token,
+                    'type': metadata.get('content_type', 'unknown'),
+                    'protected': metadata.get('is_protected', 'False'),
+                })
+        except:
+            # Skip keys that aren't file metadata
+            continue
+    
+    return render_template('admin/list_files.html', files=anonymized, count=len(anonymized))
 
 
 
 @bp.route('/info/<token>', methods=['GET'])
+@admin_required
 def file_info(token):
    try :
     if redis_service.get_file_metadata(token):
@@ -329,8 +361,9 @@ def error_page(code):
     return render_template(template), code
 
 @bp.route('/stats')
+@admin_required
 def stats():
-    """Render stats dashboard HTML page"""
+    """Admin stats dashboard (protected)."""
     stats_data = _get_stats_data()
     return render_template('stats.html', stats=stats_data)
 
