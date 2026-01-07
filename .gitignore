@@ -1,5 +1,50 @@
-.venv
-__pycache__
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables (NEVER commit!)
+.env
+
+# Uploads (user data)
+uploads/
+
+# Flask instance folder
+instance/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
 
 notes_ai/*
 daily_logs/*
