@@ -397,13 +397,44 @@ MODIFIED:
 ## 📅 Week 3: Security & Polish (Jan 8 - Jan 14)
 **Focus**: Encryption & Rate Limiting
 
-- **Day 15 (Jan 8)**: Research and select File Encryption method (likely symmetrical encryption like Fernet/AES).
-- **Day 16 (Jan 9)**: Implement Encryption-at-rest (encrypt file before saving to disk).
-- **Day 17 (Jan 10)**: Implement Decryption-on-fly (decrypt stream when user downloads).
-- **Day 18 (Jan 11)**: Add Flask-Limiter to prevent abuse (Rate limiting on upload/download endpoints).
-- **Day 19 (Jan 12)**: UI Polish (Animations, Copy-to-clipboard buttons, better mobile responsiveness).
-- **Day 20 (Jan 13)**: Security Audit (Dependency vulnerability scan, ensuring no secrets in code).
-- **Day 21 (Jan 14)**: Week 3 Wrap-up & Performance testing.
+---
+
+## 📅 Day 15: File Encryption Research (Jan 8, 2026)
+**Status**: ✅ Completed
+
+### Research Completed
+- Studied production patterns: Signal, Bitwarden, Microsoft 365
+- Compared algorithms: AES-256-GCM vs ChaCha20-Poly1305
+- Evaluated KDFs: Argon2id vs PBKDF2 vs bcrypt
+- Analyzed Python libraries: Fernet vs hazmat primitives
+- Designed streaming encryption for large files
+
+### Architecture Decisions
+
+| Component        | Choice            | Rationale                                 |
+| ---------------- | ----------------- | ----------------------------------------- |
+| **Algorithm**    | ChaCha20-Poly1305 | Constant-time, no AES-NI needed           |
+| **KDF**          | Argon2id          | Memory-hard, GPU-resistant                |
+| **Key Approach** | Hybrid            | Optional password (zero-knowledge if set) |
+| **Chunking**     | 64KB              | Memory-efficient streaming                |
+
+### Real Incidents Studied
+- Nonce reuse (184 HTTPS servers vulnerable)
+- Heartbleed (OpenSSL buffer over-read)
+- Uber GitHub leak (hardcoded credentials)
+- Capital One breach (encryption without proper IAM)
+
+### Lessons Learned
+- Encryption is easy; key management is where apps die
+- One bug = total failure in crypto
+- Zero-knowledge shifts responsibility to users
+- Chunking essential for memory efficiency at scale
+
+---
+
+### Week 3 Remaining
+- **Day 16 (Jan 9)**: Implement Encryption-at-rest (ChaCha20 + chunking).
+- **Day 17 (Jan 10)**: Implement Decryption-on-fly (streaming decrypt).
 
 ---
 
