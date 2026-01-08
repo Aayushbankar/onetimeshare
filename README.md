@@ -31,6 +31,191 @@
 
 ---
 
+## 🚀 Quick Start (Docker - Recommended)
+
+The fastest way to run OneTimeShare is using Docker. This is the **recommended approach** for most users.
+
+### Prerequisites
+- [Docker](https://docs.docker.com/get-docker/) (v20.10+)
+- [Docker Compose](https://docs.docker.com/compose/install/) (v2.0+)
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/Aayushbankar/onetimeshare.git
+cd onetimeshare
+```
+
+### Step 2: Configure Environment
+```bash
+# Copy the example environment file
+cp .env.example .env
+
+# Edit .env and set your credentials
+# REQUIRED: Set a secure SECRET_KEY and ADMIN_PASSWORD
+nano .env  # or use your preferred editor
+```
+
+**Important Configuration:**
+| Variable         | Required | Description                                     |
+| ---------------- | -------- | ----------------------------------------------- |
+| `SECRET_KEY`     | ✅ Yes    | Flask session secret (use a long random string) |
+| `ADMIN_PASSWORD` | ✅ Yes    | Password for admin panel access                 |
+| `ADMIN_USERNAME` | No       | Admin username (default: `admin`)               |
+| `JWT_SECRET_KEY` | No       | JWT token secret for API auth                   |
+
+### Step 3: Launch with Docker Compose
+```bash
+# Start all services (Flask app + Redis)
+docker-compose up -d
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f web
+```
+
+### Step 4: Access the Application
+- 🌐 **Web App**: http://localhost:5000
+- 🔐 **Admin Panel**: http://localhost:5000/auth/login
+- 📊 **Stats Dashboard**: http://localhost:5000/stats
+
+### Stop & Cleanup
+```bash
+# Stop services
+docker-compose down
+
+# Stop and remove all data (uploads + Redis)
+docker-compose down -v
+```
+
+---
+
+## 🛠️ Manual Installation (Development)
+
+For local development without Docker:
+
+### Prerequisites
+- Python 3.10+
+- Redis server running locally
+
+### Setup
+```bash
+# Clone the repository
+git clone https://github.com/Aayushbankar/onetimeshare.git
+cd onetimeshare
+
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your settings
+
+# Start Redis (in another terminal)
+redis-server
+
+# Run the application
+python run.py
+```
+
+---
+
+## 📖 Usage Guide
+
+### Uploading a File
+1. Navigate to http://localhost:5000
+2. Drag & drop a file or click to select
+3. (Optional) Set a password for additional security
+4. Click **Upload**
+5. Copy the generated unique link
+
+### Downloading a File
+1. Open the unique link
+2. If password-protected, enter the password
+3. Click **Download** — the file is permanently deleted after this!
+
+### Admin Dashboard
+1. Go to http://localhost:5000/auth/login
+2. Login with your `ADMIN_USERNAME` and `ADMIN_PASSWORD`
+3. View stats, manage files, and monitor system health
+
+### API Endpoints
+| Endpoint        | Method | Description                         |
+| --------------- | ------ | ----------------------------------- |
+| `/upload`       | POST   | Upload a file (multipart/form-data) |
+| `/info/<token>` | GET    | Get file metadata                   |
+| `/d/<token>`    | GET    | Download file (triggers deletion)   |
+| `/stats-json`   | GET    | System statistics (JSON)            |
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+### Ways to Contribute
+- 🐛 **Report Bugs**: Open an issue with steps to reproduce
+- 💡 **Suggest Features**: Share ideas via GitHub Issues
+- 📝 **Improve Docs**: Fix typos, clarify instructions
+- 🔧 **Submit Code**: Fork, code, and open a Pull Request
+
+### Development Workflow
+```bash
+# 1. Fork the repository on GitHub
+
+# 2. Clone your fork
+git clone https://github.com/YOUR_USERNAME/onetimeshare.git
+cd onetimeshare
+
+# 3. Create a feature branch
+git checkout -b feature/your-feature-name
+
+# 4. Make your changes and test
+docker-compose up -d
+# ... test your changes ...
+
+# 5. Commit with a descriptive message
+git add .
+git commit -m "feat: add your feature description"
+
+# 6. Push to your fork
+git push origin feature/your-feature-name
+
+# 7. Open a Pull Request on GitHub
+```
+
+### Code Guidelines
+- Follow existing code style and patterns
+- Add comments for complex logic
+- Update documentation if adding new features
+- Test your changes before submitting
+
+### Commit Message Format
+```
+type: brief description
+
+Types: feat, fix, docs, style, refactor, test, chore
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+You are free to:
+- ✅ Use commercially
+- ✅ Modify
+- ✅ Distribute
+- ✅ Use privately
+
+---
+
 ## 📅 Day 0: Inception & Foundation (Dec 24, 2025)
 **Status**: ✅ Completed
 
