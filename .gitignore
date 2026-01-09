@@ -46,6 +46,9 @@ Thumbs.db
 *.bak
 
 
+
+# user defined 
+
 notes_ai/*
 daily_logs/*
 posts/*

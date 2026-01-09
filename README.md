@@ -617,9 +617,67 @@ MODIFIED:
 
 ---
 
+## 📅 Day 16-17: File Encryption Implementation (Jan 9, 2026)
+**Status**: ✅ Completed (Combined)
+
+### Feature Built
+End-to-end file encryption using ChaCha20-Poly1305:
+- **Upload**: Files encrypted before saving to disk
+- **Download**: Streaming decryption on-the-fly
+- **Password Mode**: Argon2id key derivation (zero-knowledge)
+- **Server Mode**: Random 256-bit key stored in Redis
+
+### Files Created/Modified
+```
+NEW:
+├── app/utils/encryption_utils.py   # 6 encryption functions
+├── tests/test_encryption.py        # 18 unit tests
+└── notes_ai/Day_16/                # 13 learning guides
+
+MODIFIED:
+├── app/utils/serve_and_delete.py   # Streaming decrypt
+├── app/routes.py                   # Encrypt on upload
+├── app/services/redis_service.py   # Encryption metadata
+└── config.py                       # Argon2id settings
+```
+
+### The Journey: 25 Bugs Fixed
+
+| Pass | Focus                  | Bugs              |
+| ---- | ---------------------- | ----------------- |
+| 1    | Initial implementation | 9                 |
+| 2-3  | Bug fixes              | 3                 |
+| 4    | Unit testing           | 0 (18 tests pass) |
+| 5    | Manual testing         | 2                 |
+| 6-7  | Streaming decrypt      | 10                |
+| 8    | Final fixes            | 1                 |
+
+### Critical Lesson: Flask Streaming Pattern
+```python
+# ❌ WRONG - Response inside generator
+def generate():
+    yield chunk
+    return Response(generate())  # Infinite recursion!
+
+# ✅ CORRECT - Response outside generator
+def generate():
+    yield chunk
+return Response(generate())  # Outside!
+```
+
+### Lessons Learned
+1. Typos are #1 bug source (`chuck` vs `chunk`)
+2. Redis stores strings — always `bytes.fromhex()` and `.hex()`
+3. Flask streaming: Response OUTSIDE, cleanup IN generator's `finally`
+4. Manual testing catches integration bugs unit tests miss
+
+---
+
 ### Week 3 Remaining
-- **Day 16 (Jan 9)**: Implement Encryption-at-rest (ChaCha20 + chunking).
-- **Day 17 (Jan 10)**: Implement Decryption-on-fly (streaming decrypt).
+- **Day 17 (Jan 10)**: Rate Limiting (Flask-Limiter) - pulled forward since encryption done.
+- **Day 18 (Jan 11)**: UI Polish (animations, mobile responsiveness).
+- **Day 19 (Jan 12)**: Security Audit (dependency scan, secret detection).
+- **Day 20-21 (Jan 13-14)**: Week 3 wrap-up, performance testing.
 
 ---
 
