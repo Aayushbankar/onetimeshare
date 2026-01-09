@@ -19,6 +19,17 @@ from app.auth.decorators import admin_required
 from app.utils.serve_and_delete import serve_and_delete
 
 
+import base64
+from app.utils.encryption_utils import (
+    generate_key,generate_salt,derive_key_from_password,encrypt_file_chunked
+)
+
+
+
+
+
+
+
 def handle_redis_error(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
@@ -78,17 +89,35 @@ def upload_file():
         os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True) 
         file.save(filepath)
 
+
+
+
  
         # step 1.1 check if the user has kept the passowrd settin gturned on / off 
-        password = request.form.get('password')
+        password = request.form.get('password',"")
         password_hash = None
         is_protected = False
 
         if password:
             password_hash = PasswordUtils.hash_password(password)
+            salt = generate_salt()
+            key = derive_key_from_password(password, salt)
+            encryption_key = ""
+            encryption_salt = salt.hex()
             is_protected = True
+        else:
+            key = generate_key()
+            encryption_key = base64.b64encode(key).decode()
+            encryption_salt = ""
+
+        temp_path = filepath + ".temp"
+        os.rename(filepath, temp_path)
 
 
+        base_nonce = encrypt_file_chunked(temp_path,filepath,key)
+
+
+        os.remove(temp_path)
 
         # step 2 : store file metadata in redis
         metadata = {
@@ -98,7 +127,12 @@ def upload_file():
             'token': file_name,
             'is_protected': str(is_protected),
             'password_hash': password_hash if password_hash else "",
-            'attempt_to_unlock': '0'  # ← Changed to string!
+            'attempt_to_unlock': '0',  # ← Changed to string!
+            'encryption_salt': encryption_salt,
+            'encryption_key': encryption_key,
+            'encryption_nonce' : base_nonce.hex(),
+            'is_encrypted' : "True"
+
         }
         
         redis_service.store_file_metadata( file_name, metadata)
@@ -150,7 +184,7 @@ def download_file(token):
                 return render_download_page(token)
             elif metadata.get('is_protected') == 'False':
                 redis_service.increment_counter("unprotected_downloads",1)
-                return serve_and_delete(uuid_file_name,original_file_name,directory_path,token,redis_service=redis_service)
+                return serve_and_delete(uuid_file_name,original_file_name,directory_path,token,redis_service,metadata=metadata,password=None)
             else:
                 return jsonify({
                     "status": "error",
@@ -245,7 +279,9 @@ def verify_token(token):
                     metadata.get('real_filename'),
                     current_app.config['UPLOAD_FOLDER'],
                     token,
-                    redis_service=redis_service
+                    redis_service,
+                    password=password,
+                    metadata=metadata
                 )
             
             else:

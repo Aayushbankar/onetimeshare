@@ -43,3 +43,12 @@ class Config:
             username == cls.ADMIN_USERNAME and 
             password == cls.ADMIN_PASSWORD
         )
+
+    CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", 64 * 1024))  # 64KB
+
+
+
+    ARGON2_MEMORY_COST = int(os.environ.get("ARGON2_MEMORY_COST", 65536))
+    ARGON2_TIME_COST = int(os.environ.get("ARGON2_TIME_COST", 3))
+    ARGON2_PARALLELISM = int(os.environ.get("ARGON2_PARALLELISM", 4))
+    ARGON2_SALT_LENGTH = int(os.environ.get("ARGON2_SALT_LENGTH", 16))

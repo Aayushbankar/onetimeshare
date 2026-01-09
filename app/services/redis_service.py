@@ -48,6 +48,10 @@ class RedisService:
                     "is_protected": metadata['is_protected'],
                     "attempt_to_unlock": metadata.get('attempt_to_unlock', '0'),  # ← ADD THIS!
                     "TIME_TO_LIVE": str(Config.REDIS_TTL) + " seconds",
+                    "is_encrypted": metadata.get("is_encrypted", "True"),
+                    "encryption_nonce": metadata.get("encryption_nonce", ""),
+                    "encryption_key": metadata.get("encryption_key", ""),
+                    "encryption_salt": metadata.get("encryption_salt", ""),
                 }) 
                 self.redis_client.expire(token,str(Config.REDIS_TTL))
             
