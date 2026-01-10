@@ -1,9 +1,12 @@
 # 🚀 One-Time Secure File/Text Sharing App
 > **30-Day Build Challenge**
 
-![Status](https://img.shields.io/badge/Status-Planning-blue?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Live-success?style=flat-square)
 ![Language](https://img.shields.io/badge/Language-Python-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+![Deployment](https://img.shields.io/badge/Deployment-Render-purple?style=flat-square)
+
+> **🔴 LIVE DEMO**: [https://onetimeshare.onrender.com](https://onetimeshare.onrender.com)
 
 ---
 
