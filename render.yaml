@@ -23,7 +23,7 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: ADMIN_PASSWORD
-        sync: false # Must be set manually in dashboard!
+        generateValue: true
       - key: ADMIN_USERNAME
         value: admin
       - key: JWT_SECRET_KEY
