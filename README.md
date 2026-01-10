@@ -617,8 +617,8 @@ MODIFIED:
 
 ---
 
-## 📅 Day 16-17: File Encryption Implementation (Jan 9, 2026)
-**Status**: ✅ Completed (Combined)
+## 📅 Day 16: File Encryption Implementation (Jan 9, 2026)
+**Status**: ✅ Completed
 
 ### Feature Built
 End-to-end file encryption using ChaCha20-Poly1305:
@@ -627,30 +627,10 @@ End-to-end file encryption using ChaCha20-Poly1305:
 - **Password Mode**: Argon2id key derivation (zero-knowledge)
 - **Server Mode**: Random 256-bit key stored in Redis
 
-### Files Created/Modified
-```
-NEW:
-├── app/utils/encryption_utils.py   # 6 encryption functions
-├── tests/test_encryption.py        # 18 unit tests
-└── notes_ai/Day_16/                # 13 learning guides
-
-MODIFIED:
-├── app/utils/serve_and_delete.py   # Streaming decrypt
-├── app/routes.py                   # Encrypt on upload
-├── app/services/redis_service.py   # Encryption metadata
-└── config.py                       # Argon2id settings
-```
-
-### The Journey: 25 Bugs Fixed
-
-| Pass | Focus                  | Bugs              |
-| ---- | ---------------------- | ----------------- |
-| 1    | Initial implementation | 9                 |
-| 2-3  | Bug fixes              | 3                 |
-| 4    | Unit testing           | 0 (18 tests pass) |
-| 5    | Manual testing         | 2                 |
-| 6-7  | Streaming decrypt      | 10                |
-| 8    | Final fixes            | 1                 |
+### Architecture Decisions
+- **Algorithm**: ChaCha20-Poly1305 (faster/safer than AES-GCM on software)
+- **Key Derivation**: Argon2id (memory-hard password hashing)
+- **Chunking**: 64KB chunks for low-memory streaming
 
 ### Critical Lesson: Flask Streaming Pattern
 ```python
@@ -665,19 +645,38 @@ def generate():
 return Response(generate())  # Outside!
 ```
 
+---
+
+## 📅 Day 17: Rate Limiting & UI Polish (Jan 10, 2026)
+**Status**: ✅ Completed
+
+### Features Built
+1.  **Rate Limiting Engine**:
+    - Integrated `Flask-Limiter` with Redis backend
+    - Limits: 5 uploads/hour, 60 downloads/minute
+    - Custom `429.html` error page
+2.  **Admin Analytics**:
+    - Real-time "Limit Hits" counter in stats dashboard
+3.  **UI Redesign (Pass 6)**:
+    - Standardized ALL 9 error pages (404, 500, 403, 410, etc.)
+    - Applied "Industrial Dark" theme (screws, containment cards)
+
+### 6 Bugs Fixed
+- **Critical**: Flask-Limiter 3.x breaking changes (storage_uri deprecation)
+- **Critical**: Hardcoded Redis host in config
+- **UX**: Inconsistent error page styling (Fixed by redesign)
+
 ### Lessons Learned
-1. Typos are #1 bug source (`chuck` vs `chunk`)
-2. Redis stores strings — always `bytes.fromhex()` and `.hex()`
-3. Flask streaming: Response OUTSIDE, cleanup IN generator's `finally`
-4. Manual testing catches integration bugs unit tests miss
+- **Breaking Changes Happen**: Libraries evolve (Flask-Limiter 3.0 changed init pattern)
+- **Redis Keys**: Default limiter prefix is `LIMITS:LIMITER*`, not `LIMITER:*`
+- **Visual Consistency**: Error pages are part of the product experience
 
 ---
 
 ### Week 3 Remaining
-- **Day 17 (Jan 10)**: Rate Limiting (Flask-Limiter) - pulled forward since encryption done.
-- **Day 18 (Jan 11)**: UI Polish (animations, mobile responsiveness).
-- **Day 19 (Jan 12)**: Security Audit (dependency scan, secret detection).
-- **Day 20-21 (Jan 13-14)**: Week 3 wrap-up, performance testing.
+- **Day 18 (Jan 11)**: UI Interaction Polish (Animations, Mobile QA).
+- **Day 19 (Jan 12)**: Security Audit (Dependency vulnerability scan).
+- **Day 20-21 (Jan 13-14)**: Week 3 wrap-up & Performance testing.
 
 ---
 
@@ -695,33 +694,3 @@ return Response(generate())  # Outside!
 - **Day 30 (Jan 24)**: **PUBLIC LAUNCH** - Release v1.0.0.
 
 ---
-
-## 📝 Daily Adaptation Template
-
-Copy this into your daily log to track progress and blockers.
-
-```markdown
-### Evening Review Questions (Answer daily):
-- **What surprised me today?** (Technical or feedback)
-  - 
-- **What's blocking progress?**
-  - 
-- **What feedback should I act on immediately?**
-  - 
-- **What can I simplify tomorrow?**
-  - 
-- **What should I learn tonight to unblock tomorrow?**
-  - 
-
-### Morning Planning Questions:
-- **Based on yesterday, what needs to change today?**
-  - 
-- **What's the most valuable single thing I can complete?**
-  - 
-- **Who can help me with today's challenges?**
-  - 
-- **What's the simplest implementation that works?**
-  - 
-- **How can I share today's progress compellingly?**
-  - 
-```

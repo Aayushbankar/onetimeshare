@@ -1,0 +1,36 @@
+services:
+  # Web Service (Python/Flask)
+  - type: web
+    name: onetimeshare
+    env: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: FLASK_ENV
+        value: production
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: onetimeshare-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: onetimeshare-redis
+          property: port
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false # Must be set manually in dashboard!
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: JWT_SECRET_KEY
+        generateValue: true
+
+  # Redis Service
+  - type: redis
+    name: onetimeshare-redis
+    plan: free
+    ipAllowList: [] # Access only from internal services

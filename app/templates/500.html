@@ -1,39 +1,41 @@
 {% extends "base.html" %} {% block title %}500 - Server Error{% endblock %} {%
 block content %}
-<div class="container text-center mt-5">
-  <div class="error-container">
-    <h1 class="error-code">500</h1>
-    <h2 class="error-title">Something Went Wrong</h2>
-    <p class="error-message">
-      We're experiencing technical difficulties. Please try again later.
+<div class="page-container">
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1 class="hero-title">500 <span class="hero-accent">SYSTEM ERROR</span></h1>
+    <p class="hero-subtitle">
+      Critical system failure detected.
     </p>
-    <a href="{{ url_for('main.index') }}" class="btn btn-primary mt-3"
-      >Return to Homepage</a
-    >
+  </div>
+
+  <!-- Containment Card -->
+  <div class="containment-card">
+    <!-- Corner Screws -->
+    <div class="screw screw-tl"></div>
+    <div class="screw screw-tr"></div>
+    <div class="screw screw-bl"></div>
+    <div class="screw screw-br"></div>
+
+    <!-- Error Icon -->
+    <div class="error-icon" style="margin-bottom: var(--space-4); color: var(--color-error); background: transparent; width: auto; height: auto;">
+        ☣️
+    </div>
+
+    <h2 class="error-title" style="color: var(--color-error);">SERVER MELTDOWN</h2>
+    
+    <div class="warning-box" style="border-color: var(--color-error); background: rgba(220, 38, 38, 0.1);">
+      <p style="font-size: 14px; color: var(--color-error);">
+        ⚠️ <strong>INTERNAL ERROR</strong>
+      </p>
+      <p class="mt-2" style="color: var(--color-error);">
+        Our engineers have been notified. Please try again later.
+      </p>
+    </div>
+
+    <a href="/" class="btn btn-primary btn-large">
+      EVACUATE TO HOME
+    </a>
   </div>
 </div>
-
-<style>
-  .error-container {
-    padding: 60px 20px;
-  }
-  .error-code {
-    font-size: 8rem;
-    font-weight: 700;
-    color: #dc3545;
-    margin-bottom: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  }
-  .error-title {
-    font-size: 2rem;
-    color: #ff6b35;
-    margin-bottom: 20px;
-  }
-  .error-message {
-    font-size: 1.2rem;
-    color: #aaa;
-    max-width: 500px;
-    margin: 0 auto 30px;
-  }
-</style>
 {% endblock %}

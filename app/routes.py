@@ -26,7 +26,7 @@ from app.utils.encryption_utils import (
 
 
 
-
+from app.extensions import limiter
 
 
 
@@ -81,6 +81,7 @@ def index():
 
 
 @bp.route('/upload', methods=['POST'])
+@limiter.limit("5 per hour")
 @handle_redis_error
 def upload_file():  
         # step 1 : file sanitation , genrating uuid and saving file
@@ -147,6 +148,7 @@ def upload_file():
 
 
 @bp.route('/d/<token>', methods=['GET'])
+@limiter.limit("60 per minute")
 @handle_redis_error
 def download_file(token):
 
@@ -238,6 +240,7 @@ def render_download_page(token):
 
 
 @bp.route('/verify/<token>', methods=['GET','POST'])
+@limiter.limit("10 per minute")
 @handle_redis_error
 def verify_token(token):
     if request.method == 'GET':
@@ -389,6 +392,7 @@ def error_page(code):
         403: '403.html',
         404: '404.html',
         410: '410.html',
+        429: '429.html',
         500: '500.html',
         503: '503.html',
         504: '504.html'
@@ -421,5 +425,20 @@ def _get_stats_data():
         "list_files_visits": redis_service.get_counter("list_files_visits"),
         "info_visits": redis_service.get_counter("info_visits"),
         "protected_downloads": redis_service.get_counter("protected_downloads"),
-        "unprotected_downloads": redis_service.get_counter("unprotected_downloads")
+        "unprotected_downloads": redis_service.get_counter("unprotected_downloads"),
+        "rate_limit_hits": redis_service.get_counter("rate_limit_hits")
     }
+
+@bp.app_errorhandler(429)
+def rate_limit_error(e):
+    # Increment global rate limit counter
+    redis_service.increment_counter("rate_limit_hits", 1)
+    
+    current_app.logger.warning(
+        f"🚫 Rate limit hit: IP={request.remote_addr}, "
+        f"Path={request.path}, Limit={e.description}"
+    )
+    # Return HTML for browser, JSON for API
+    if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+        return jsonify({"error": "Rate limit exceeded", "retry_after": str(e.description)}), 429
+    return render_template('429.html'), 429

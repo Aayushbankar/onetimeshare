@@ -1,21 +1,41 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %}401 - Unauthorized{% endblock %} {%
+block content %}
+<div class="page-container">
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1 class="hero-title">401 <span class="hero-accent">LOCKED</span></h1>
+    <p class="hero-subtitle">
+      Authentication is required to access this resource.
+    </p>
+  </div>
 
-{% block title %}401 - Unauthorized{% endblock %}
+  <!-- Containment Card -->
+  <div class="containment-card">
+    <!-- Corner Screws -->
+    <div class="screw screw-tl"></div>
+    <div class="screw screw-tr"></div>
+    <div class="screw screw-bl"></div>
+    <div class="screw screw-br"></div>
 
-{% block content %}
-<div class="container text-center mt-5">
-    <div class="error-container">
-        <h1 class="error-code">401</h1>
-        <h2 class="error-title">Unauthorized</h2>
-        <p class="error-message">You need to authenticate to access this resource.</p>
-        <a href="{{ url_for('main.index') }}" class="btn btn-primary mt-3">Return to Homepage</a>
+    <!-- Error Icon -->
+    <div class="error-icon" style="margin-bottom: var(--space-4); color: var(--color-warning); background: transparent; width: auto; height: auto;">
+        🔒
     </div>
-</div>
 
-<style>
-.error-container { padding: 60px 20px; }
-.error-code { font-size: 8rem; font-weight: 700; color: #6c757d; margin-bottom: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-.error-title { font-size: 2rem; color: #ff6b35; margin-bottom: 20px; }
-.error-message { font-size: 1.2rem; color: #aaa; max-width: 500px; margin: 0 auto 30px; }
-</style>
+    <h2 class="error-title" style="color: var(--color-warning);">LOGIN REQUIRED</h2>
+    
+    <div class="warning-box">
+      <p style="font-size: 14px; color: var(--color-warning);">
+        ⚠️ <strong>AUTHENTICATION FAILED</strong>
+      </p>
+      <p class="mt-2">
+        Please log in with valid credentials to proceed.
+      </p>
+    </div>
+
+    <a href="/admin/login" class="btn btn-primary btn-large">
+      LOGIN PAGE
+    </a>
+  </div>
+</div>
 {% endblock %}

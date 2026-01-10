@@ -208,6 +208,10 @@ block styles %}
       </div>
       <div class="stat-label">🔒 PROTECTED</div>
     </div>
+    <div class="stat-card error">
+        <div class="stat-value" id="rate_limit_hits">{{ stats.rate_limit_hits }}</div>
+        <div class="stat-label">🚫 LIMIT HITS</div>
+    </div>
   </div>
 
   <!-- Detailed Stats Section -->
@@ -260,7 +264,7 @@ block styles %}
   document.getElementById("timestamp").textContent =
     new Date().toLocaleString();
 
-  // Auto-refresh stats every 30 seconds
+  // Auto-refresh stats every 8 seconds
   setInterval(async () => {
     try {
       const response = await fetch("/stats-json");
@@ -280,6 +284,7 @@ block styles %}
       updateValue("downloads", stats.downloads);
       updateValue("deletions", stats.deletions);
       updateValue("protected", stats.protected_downloads);
+      updateValue("rate_limit_hits", stats.rate_limit_hits);
       updateValue("index_visits", stats.index_visits);
       updateValue("list_files_visits", stats.list_files_visits);
       updateValue("info_visits", stats.info_visits);

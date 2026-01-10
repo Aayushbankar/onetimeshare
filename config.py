@@ -52,3 +52,9 @@ class Config:
     ARGON2_TIME_COST = int(os.environ.get("ARGON2_TIME_COST", 3))
     ARGON2_PARALLELISM = int(os.environ.get("ARGON2_PARALLELISM", 4))
     ARGON2_SALT_LENGTH = int(os.environ.get("ARGON2_SALT_LENGTH", 16))
+
+
+
+    # rate-limiting :
+    RATELIMIT_STORAGE_URI = f"redis://{os.environ.get('REDIS_HOST', 'localhost')}:{os.environ.get('REDIS_PORT', 6379)}/0"
+    RATELIMIT_DEFAULT = "100 per hour"

@@ -1,21 +1,41 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block title %}403 - Access Denied{% endblock %} {%
+block content %}
+<div class="page-container">
+  <!-- Hero Section -->
+  <div class="hero">
+    <h1 class="hero-title">403 <span class="hero-accent">FORBIDDEN</span></h1>
+    <p class="hero-subtitle">
+      You are not authorized to access this area.
+    </p>
+  </div>
 
-{% block title %}403 - Forbidden{% endblock %}
+  <!-- Containment Card -->
+  <div class="containment-card">
+    <!-- Corner Screws -->
+    <div class="screw screw-tl"></div>
+    <div class="screw screw-tr"></div>
+    <div class="screw screw-bl"></div>
+    <div class="screw screw-br"></div>
 
-{% block content %}
-<div class="container text-center mt-5">
-    <div class="error-container">
-        <h1 class="error-code">403</h1>
-        <h2 class="error-title">Access Denied</h2>
-        <p class="error-message">You don't have permission to access this resource.</p>
-        <a href="{{ url_for('main.index') }}" class="btn btn-primary mt-3">Return to Homepage</a>
+    <!-- Error Icon -->
+    <div class="error-icon" style="margin-bottom: var(--space-4); color: var(--color-error); background: transparent; width: auto; height: auto;">
+        🚫
     </div>
-</div>
 
-<style>
-.error-container { padding: 60px 20px; }
-.error-code { font-size: 8rem; font-weight: 700; color: #dc3545; margin-bottom: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-.error-title { font-size: 2rem; color: #ff6b35; margin-bottom: 20px; }
-.error-message { font-size: 1.2rem; color: #aaa; max-width: 500px; margin: 0 auto 30px; }
-</style>
+    <h2 class="error-title" style="color: var(--color-error);">ACCESS DENIED</h2>
+    
+    <div class="warning-box" style="border-color: var(--color-error); background: rgba(220, 38, 38, 0.1);">
+      <p style="font-size: 14px; color: var(--color-error);">
+        ⚠️ <strong>UNAUTHORIZED</strong>
+      </p>
+      <p class="mt-2" style="color: var(--color-error);">
+        You do not have permission to view this resource.
+      </p>
+    </div>
+
+    <a href="/" class="btn btn-primary btn-large">
+      RETURN TO SAFETY
+    </a>
+  </div>
+</div>
 {% endblock %}

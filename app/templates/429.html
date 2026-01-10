@@ -1,11 +1,11 @@
-{% extends "base.html" %} {% block title %}400 - Bad Request{% endblock %} {%
+{% extends "base.html" %} {% block title %}Rate Limit Exceeded{% endblock %} {%
 block content %}
 <div class="page-container">
   <!-- Hero Section -->
   <div class="hero">
-    <h1 class="hero-title">400 <span class="hero-accent">BAD REQUEST</span></h1>
+    <h1 class="hero-title">WHOA, <span class="hero-accent">SLOW DOWN.</span></h1>
     <p class="hero-subtitle">
-      The server couldn't understand your request.
+      You're moving a bit too fast for our servers.
     </p>
   </div>
 
@@ -19,22 +19,26 @@ block content %}
 
     <!-- Error Icon -->
     <div class="error-icon" style="margin-bottom: var(--space-4); color: var(--color-warning); background: transparent; width: auto; height: auto;">
-        ⚠️
+        ⏱️
     </div>
 
-    <h2 class="error-title" style="color: var(--color-warning);">INVALID INPUT</h2>
+    <h2 class="error-title" style="color: var(--color-warning);">RATE LIMIT HIT</h2>
     
     <div class="warning-box">
       <p style="font-size: 14px; color: var(--color-warning);">
-        ⚠️ <strong>REQUEST ERROR</strong>
+        ⚠️ <strong>TOO MANY REQUESTS</strong>
       </p>
       <p class="mt-2">
-        Your browser sent a request that this server could not understand.
+        To ensure fair usage for everyone, we've temporarily paused your ability to perform this action.
       </p>
     </div>
 
+    <p style="font-family: var(--font-mono); font-size: 12px; color: var(--color-null); margin-bottom: var(--space-6);">
+        Please wait a moment before trying again.
+    </p>
+
     <a href="/" class="btn btn-primary btn-large">
-      TRY AGAIN
+      BACK TO HOME
     </a>
   </div>
 </div>

@@ -9,11 +9,17 @@ import config
 from flask_login import LoginManager
 from flask_jwt_extended import JWTManager
 
+
+
+from .extensions import limiter
+from flask_limiter.util import get_remote_address
+
 # Initialize extensions (no SQLAlchemy needed!)
 login_manager = LoginManager()
 jwt = JWTManager()
 
 CONFIG = config.Config()
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -22,11 +28,17 @@ def create_app(test_config=None):
     app.redis_client = redis_client
     app.config.from_object(CONFIG)
     app.register_blueprint(routes.bp)
+
+
+
+
+
     
     with app.app_context():
         from app.services.redis_service import RedisService
         from config import Config
         import time
+        limiter.init_app(app)  # Reads RATELIMIT_STORAGE_URI from app.config
         
         # Retry Redis connection (Docker network may not be ready immediately)
         redis_service = None
@@ -57,11 +69,23 @@ def create_app(test_config=None):
             analytics_counters = [
                 "uploads", "downloads", "deletions",
                 "index_visits", "list_files_visits", "info_visits",
-                "protected_downloads", "unprotected_downloads"
+                "protected_downloads", "unprotected_downloads",
+                "rate_limit_hits"
             ]
             for counter in analytics_counters:
                 redis_service.set_counter(counter, 0)
             app.logger.info(f"Startup analytics reset: {len(analytics_counters)} counters reset to 0")
+            
+            # Reset rate limit counters on startup (so limits reset on restart)
+            try:
+                rate_limit_keys = redis_service.redis_client.keys("LIMITS:LIMITER*")
+                if rate_limit_keys:
+                    redis_service.redis_client.delete(*rate_limit_keys)
+                    app.logger.info(f"🔄 Rate limit reset: {len(rate_limit_keys)} keys cleared")
+                else:
+                    app.logger.info("🔄 Rate limit reset: No existing rate limit keys")
+            except Exception as e:
+                app.logger.warning(f"Could not reset rate limits: {e}")
         else:
             app.logger.error("❌ Could not connect to Redis after 5 attempts!")
         
