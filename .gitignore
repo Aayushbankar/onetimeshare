@@ -47,7 +47,7 @@ Thumbs.db
 
 
 
-# user defined 
+user defined
 
 notes_ai/*
 daily_logs/*
@@ -65,3 +65,4 @@ docs/reume_ab.pdf
 docs/misc/*
 docs/1Day_Product_Ideas.md
 
+serve_logs.md

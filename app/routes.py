@@ -64,15 +64,8 @@ def handle_redis_error(fn):
 bp = Blueprint('main', __name__)
 
 
-
-
-
-
-
 redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT, Config.REDIS_DB)
-
-
-
+# 
 @bp.route('/health')
 @limiter.exempt
 def health_check():
@@ -96,10 +89,6 @@ def upload_file():
         file_name, filepath = generate_uuid_and_filepath(file)
         os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True) 
         file.save(filepath)
-
-
-
-
  
         # step 1.1 check if the user has kept the passowrd settin gturned on / off 
         password = request.form.get('password',"")
