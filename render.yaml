@@ -4,6 +4,7 @@ services:
     name: onetimeshare
     env: docker
     plan: free
+    autoDeploy: false # Wait for CI/CD next week!
     healthCheckPath: /
     envVars:
       - key: PORT
