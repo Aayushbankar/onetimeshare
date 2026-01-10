@@ -5,7 +5,7 @@ services:
     env: docker
     plan: free
     autoDeploy: false # Wait for CI/CD next week!
-    healthCheckPath: /
+    healthCheckPath: /health
     envVars:
       - key: PORT
         value: 10000

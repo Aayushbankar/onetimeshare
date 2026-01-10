@@ -74,6 +74,14 @@ redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT,
 
 
 @bp.route('/')
+@bp.route('/health')
+@limiter.exempt
+def health_check():
+    return "OK", 200
+
+
+@bp.route('/', methods=['GET'])
+@limiter.limit(Config.RATELIMIT_DEFAULT)
 def index():
     # redis_service.increment_counter("/ - visits ",1)
     redis_service.increment_counter("index_visits",1)
