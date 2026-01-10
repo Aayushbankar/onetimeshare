@@ -73,7 +73,6 @@ redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT,
 
 
 
-@bp.route('/')
 @bp.route('/health')
 @limiter.exempt
 def health_check():
