@@ -58,3 +58,8 @@ class Config:
     # rate-limiting :
     RATELIMIT_STORAGE_URI = f"redis://{os.environ.get('REDIS_HOST', 'localhost')}:{os.environ.get('REDIS_PORT', 6379)}/0"
     RATELIMIT_DEFAULT = "100 per hour"
+
+
+
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SECURE = True

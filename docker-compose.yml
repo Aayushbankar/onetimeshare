@@ -5,10 +5,10 @@ services:
       - "5000:5000"
     environment:
       - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      # - REDIS_PORT=6379
       # Security: Set these in production!
-      - SECRET_KEY=${SECRET_KEY:-dev-secret-change-in-production}
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-jwt-secret-change-in-production}
+      # - SECRET_KEY=${SECRET_KEY:-dev-secret-change-in-production}
+      # - JWT_SECRET_KEY=${JWT_SECRET_KEY:-jwt-secret-change-in-production}
       # Admin credentials (required for login)
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
@@ -18,7 +18,8 @@ services:
       redis:
         condition: service_healthy
     restart: on-failure 
-
+    env_file:
+      - .env
   redis:
     image: redis:alpine
     healthcheck:
@@ -26,8 +27,8 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
-    ports:
-      - "6379:6379"
+    env_file:
+      - .env
     volumes:
       - redis_data:/data
 

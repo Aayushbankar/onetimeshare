@@ -1,0 +1,13 @@
+found  the unprotedtec versioning using pip-audit 
+    for requirements.txt 
+        Name     Version ID             Fix Versions
+        -------- ------- -------------- ------------
+        urllib3  2.6.2   CVE-2026-21441 2.6.3
+        werkzeug 3.1.4   CVE-2026-21860 3.1.5
+    for the local enviromnet 
+        Name     Version ID             Fix Versions
+        -------- ------- -------------- ------------
+        pip      25.1.1  CVE-2025-8869  25.3
+        urllib3  2.6.2   CVE-2026-21441 2.6.3
+        werkzeug 3.1.4   CVE-2026-21860 3.1.5
+

@@ -1,0 +1,15 @@
+docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest git file:///pwd --only-verified > '/mnt/shared_data/projects/onetimeshare/docs/audit/trufflehog_audit.txt'
+🐷🔑🐷  TruffleHog. Unearth your secrets. 🐷🔑🐷
+
+2026-01-12T09:15:35Z    info-0  trufflehog      running source  {"source_manager_worker_id": "FGUQ9", "with_units": true}
+2026-01-12T09:15:35Z    info-0  trufflehog      scanning repo   {"source_manager_worker_id": "FGUQ9", "unit_kind": "dir", "unit": "/tmp/trufflehog-22-3553948092", "repo": "file:///pwd"}
+2026-01-12T09:15:35Z    info-0  trufflehog      finished scanning       {"chunks": 433, "bytes": 897765, "verified_secrets": 0, "unverified_secrets": 0, "scan_duration": "3.760612795s", "trufflehog_version": "3.92.4", "verification_caching": {"Hits":0,"Misses":0,"HitsWasted":0,"AttemptsSaved":0,"VerificationTimeSpentMS":0}}
+(.venv) incide@mx-elitebook:/mnt/shared_data/projects/onetimeshare
+$ docker run --rm -v "$PWD:/pwd" trufflesecurity/trufflehog:latest git file:///pwd > trufflehog_full.txt
+🐷🔑🐷  TruffleHog. Unearth your secrets. 🐷🔑🐷
+
+2026-01-12T09:16:23Z    info-0  trufflehog      running source  {"source_manager_worker_id": "MAaqj", "with_units": true}
+2026-01-12T09:16:23Z    info-0  trufflehog      scanning repo   {"source_manager_worker_id": "MAaqj", "unit_kind": "dir", "unit": "/tmp/trufflehog-22-1365542224", "repo": "file:///pwd"}
+2026-01-12T09:16:23Z    info-0  trufflehog      finished scanning       {"chunks": 433, "bytes": 897765, "verified_secrets": 0, "unverified_secrets": 0, "scan_duration": "3.828598875s", "trufflehog_version": "3.92.4", "verification_caching": {"Hits":0,"Misses":0,"HitsWasted":0,"AttemptsSaved":0,"VerificationTimeSpentMS":0}}
+(.venv) incide@mx-elitebook:/mnt/shared_data/projects/onetimeshare
+$ 
