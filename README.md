@@ -676,10 +676,44 @@ return Response(generate())  # Outside!
 
 ---
 
-### Week 3 Remaining
-- **Day 18 (Jan 11)**: UI Interaction Polish (Animations, Mobile QA).
-- **Day 19 (Jan 12)**: Security Audit (Dependency vulnerability scan).
-- **Day 20-21 (Jan 13-14)**: Week 3 wrap-up & Performance testing.
+## 📅 Day 18: UI Polish & Motion Design (Jan 11, 2026)
+**Status**: ✅ Completed
+
+### Features Built
+- **Motion System**: CSS-only `slideUpFade` entrance animations.
+- **Micro-interactions**: Tactile button feedback, instant copy verification.
+- **Mobile Overhaul**: Stacked navbar, dynamic padding, responsive grids.
+- **Page Redesigns**: Password & Max Retries pages fully themed.
+
+### Metrics
+- **Performance**: 96/100 Lighthouse
+- **CSS Size**: +2KB
+- **Mistakes**: 1 (Grepping for JS classes)
+
+---
+
+## 📅 Day 19: Security Audit (Jan 12, 2026)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Dependency Scan**: Patched 3 vulnerabilities (urllib3).
+- [x] **Secret Scanning**: Rotated hardcoded secrets to `.env`.
+- [x] **Network Hardening**: Closed exposed Redis port 6379.
+- [x] **Config Security**: Enforced HTTPOnly cookies.
+
+### Outcome
+- **Grade**: A (System fully secured)
+- **Findings**: 3 CVEs patched, keys rotated
+
+---
+
+## 📅 Day 20: Week 3 Wrap-up & Performance (Jan 13, 2026)
+**Status**: ✅ Completed
+
+### 🎯 Achievements
+- **Platinum Certified Performance**: 218 RPS @ 421ms Latency (Pass 3)
+- **Infrastructure**: Gunicorn Migration + Redis Rate Limiting
+- **Report**: [Load Testing Certification](docs/Day_20_Load_Testing_Report.md)
 
 ---
 
