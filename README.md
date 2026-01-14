@@ -717,6 +717,14 @@ return Response(generate())  # Outside!
 
 ---
 
+---
+
+## 📅 Day 21 (Jan 14): Makar Sankranti (Break Day) 🪁
+**Status**: ⏸️ Resting
+- **Activity**: Kites, Til-gul, and No Code.
+
+---
+
 ## 📅 Week 4: Launch & Documentation (Jan 15 - Jan 24)
 **Focus**: Production Ready & CI/CD
 
