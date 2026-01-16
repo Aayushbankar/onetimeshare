@@ -1,0 +1,30 @@
+{
+  "pass_id": "1.1.2",
+  "tier": 1,
+  "timestamp": "2026-01-15T00:15:30.028697",
+  "config": {
+    "users": 20,
+    "total_requests": 300,
+    "target_duration": 60
+  },
+  "results": {
+    "total_requests": 300,
+    "successful": 0,
+    "failed": 300,
+    "error_rate": 100.0,
+    "total_time": 60.15295648574829,
+    "rps": 0.0,
+    "latency": {
+      "avg": 0,
+      "p50": 0,
+      "p95": 0,
+      "p99": 0
+    },
+    "breakdown": {
+      "downloads": 205,
+      "uploads": 95,
+      "download_success": 0,
+      "upload_success": 0
+    }
+  }
+}
