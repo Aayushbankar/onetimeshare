@@ -2,6 +2,7 @@
 > **30-Day Build Challenge**
 
 ![Status](https://img.shields.io/badge/Status-Live-success?style=flat-square)
+![CI](https://github.com/Aayushbankar/onetimeshare/actions/workflows/ci.yml/badge.svg)
 ![Language](https://img.shields.io/badge/Language-Python-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 ![Deployment](https://img.shields.io/badge/Deployment-Render-purple?style=flat-square)
@@ -512,7 +513,7 @@ redis_service.store_file_metadata(token, metadata)
 - **Day 11 (Jan 4)**: ✅ Analytics & frontend polish (completed)
 - **Day 12 (Jan 5)**: ✅ Edge case handling (completed)
 - **Day 13 (Jan 6)**: ✅ Admin authentication (completed)
-- **Day 14 (Jan 7)**: Week 2 Testing & Bug Fixes.
+- **Day 14 (Jan 7)**: ✅ Week 2 Testing & Bug Fixes (completed)
 
 ---
 
@@ -579,6 +580,27 @@ MODIFIED:
 - Ask "What's the simplest solution?" before choosing technology
 - Circular imports happen — keep shared code in separate modules
 - Docker services may start before network DNS is ready — add retry logic
+
+---
+
+## 📅 Day 14: Week 2 Testing & Security Fixes (Jan 7, 2026)
+**Status**: ✅ Completed
+
+### Tasks
+- [x] **Integration Testing**: All 9 critical flows tested (upload, download, password, retry, admin).
+- [x] **Critical Bug #1**: Fixed retry counter bypass (URL revisit allowed re-entering password).
+- [x] **Critical Bug #2**: Fixed DoS vulnerability (reverted file deletion on max retries → implemented locking).
+- [x] **Medium Bug**: Fixed Redis DNS startup race condition.
+- [x] **Documentation**: Created pass analysis diagrams and mistake logs.
+
+### Key Security Fix
+**Before**: Users could delete ANY file by exhausting retries (DoS vulnerability).
+**After**: Files are LOCKED on max retries, not deleted. Entry point blocks access.
+
+### Lessons Learned
+- Availability = Security (CIA Triad) — deleting to "secure" violates availability
+- Think like an attacker: "Can I grief the user by spamming this?"
+- Locking > Deleting for abuse prevention
 
 ---
 
@@ -728,14 +750,63 @@ return Response(generate())  # Outside!
 ## 📅 Week 4: Launch & Documentation (Jan 15 - Jan 24)
 **Focus**: Production Ready & CI/CD
 
-- **Day 22 (Jan 15)**: Docker Production Optimization (Gunicorn vs Dev Server).
-- **Day 23 (Jan 16)**: Set up GitHub Actions for automated testing (Pytest).
-- **Day 24 (Jan 17)**: Write comprehensive Unit Tests for core logic.
-- **Day 25 (Jan 18)**: Deployment Config (Nginx reverse proxy setup).
-- **Day 26 (Jan 19)**: Deployment Dry-Run (Test on a VPS or cloud provider).
-- **Day 27 (Jan 20)**: Finalize `README.md` and documentation API.
-- **Day 28 (Jan 21)**: Post-Launch Polish (Feedback widgets, analytics if privacy-compliant).
-- **Day 29 (Jan 22)**: Prepare Launch content (Screenshots, Demo Video).
-- **Day 30 (Jan 24)**: **PUBLIC LAUNCH** - Release v1.0.0.
+> **Note**: Gunicorn optimization (218 RPS) and Render deployment were completed in Day 20. Week 4 focuses on CI/CD, testing, and launch preparation.
 
 ---
+
+## 📅 Day 22: CI/CD Setup + Stress Testing (Jan 15, 2026)
+**Status**: ⚠️ Partially Complete
+
+### 🎯 Completed: Comprehensive Stress Testing
+9-pass stress test suite — **ALL GRADE A @ 0% ERROR RATE**
+
+| Tier                  | Max Users | Peak RPS | P95 Latency | Grade |
+| --------------------- | --------- | -------- | ----------- | ----- |
+| **Tier 1** (Baseline) | 30        | 174.66   | 355ms       | A     |
+| **Tier 2** (Peak)     | 100       | 116.44   | 1.3s        | A     |
+| **Tier 3** (DDoS Sim) | 300       | 97.95    | 3.5s        | A     |
+
+**Performance Ceiling**: 300 concurrent users @ ~100 RPS (hardware-bound)
+
+### ❌ Deferred: CI/CD
+Carried to Day 23 due to time constraints.
+
+---
+
+## 📅 Day 23: CI/CD Pipeline Setup (Jan 16, 2026)
+**Status**: ✅ Completed
+
+### 🎯 Features Built
+1. **GitHub Actions Workflow**: `.github/workflows/ci.yml`
+   - Python 3.12 setup with pip caching
+   - Redis service container for tests
+   - Triggers on push/PR to main/develop
+2. **Test Verification**: 21/21 tests passing
+3. **CI Badge**: Added to README header
+
+### Key Configuration
+```yaml
+services:
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+```
+
+### Metrics
+- **Tests**: 21 passing, 0 failures
+- **Workflow**: 48 lines of YAML
+- **Time**: ~30 minutes implementation
+
+---
+
+### Week 4 Roadmap
+- **Day 24 (Jan 17)**: Integration & E2E Tests — Expand test coverage.
+- **Day 25 (Jan 18)**: Production Hardening — Final security sweep, HTTPS, CORS.
+- **Day 26 (Jan 19)**: Monitoring & Observability — Logging, error tracking.
+- **Day 27 (Jan 20)**: Documentation Finalization — API docs, changelog, diagrams.
+- **Day 28 (Jan 21)**: Demo Video & Screenshots — Marketing assets.
+- **Day 29 (Jan 22)**: Beta Testing & Feedback — Share with select users.
+- **Day 30 (Jan 24)**: **🚀 PUBLIC LAUNCH** - Release v1.0.0.
+
+---
+
