@@ -18,6 +18,14 @@ class MockConfig:
     ARGON2_TIME_COST = 1  # Fast for testing
     ARGON2_MEMORY_COST = 1024  # Low memory for testing
     ARGON2_PARALLELISM = 1
+    ADMIN_PASSWORD = "testpassword"
+    ADMIN_USERNAME = "admin"
+    REDIS_HOST = "localhost"
+    REDIS_PORT = 6379
+    RATELIMIT_ENABLED = False
+    SECRET_KEY = "test-secret"
+    JWT_SECRET_KEY = "test-jwt-secret"
+    UPLOAD_FOLDER = "/tmp/uploads"
 
 # Patch config module
 import config
