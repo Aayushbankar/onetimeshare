@@ -50,7 +50,7 @@ jobs:
           RATELIMIT_ENABLED: "true"
           PYTHONPATH: .
         run: |
-          nohup python -m app.run > flask.log 2>&1 &
+          nohup python run.py > flask.log 2>&1 &
           sleep 5
           cat flask.log
 

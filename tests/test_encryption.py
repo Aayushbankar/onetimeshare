@@ -32,10 +32,18 @@ spec = importlib.util.spec_from_file_location(
 encryption_utils = importlib.util.module_from_spec(spec)
 
 # Patch config in the module's namespace before loading
+original_config = sys.modules.get('config')
 sys.modules['config'] = type(sys)('config')
 sys.modules['config'].Config = MockConfig
 
-spec.loader.exec_module(encryption_utils)
+try:
+    spec.loader.exec_module(encryption_utils)
+finally:
+    # Restore original config to prevent breaking other tests
+    if original_config:
+        sys.modules['config'] = original_config
+    else:
+        del sys.modules['config']
 
 generate_key = encryption_utils.generate_key
 generate_salt = encryption_utils.generate_salt
