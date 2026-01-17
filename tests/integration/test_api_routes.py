@@ -9,8 +9,10 @@ import io
 def client():
     # Use testing config
     Config.TESTING = True
-    # Disable rate limit for testing
     Config.RATELIMIT_ENABLED = False
+    Config.ADMIN_PASSWORD = "testpassword"
+    Config.REDIS_HOST = "localhost"
+    Config.REDIS_PORT = 6379
     
     app = create_app()
     with app.test_client() as client:

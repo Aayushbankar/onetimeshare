@@ -40,6 +40,20 @@ jobs:
         run: |
           playwright install chromium
 
+      - name: Start Flask Server
+        env:
+          SECRET_KEY: test-secret-key-for-ci
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          ADMIN_USERNAME: admin
+          ADMIN_PASSWORD: testpassword
+          RATELIMIT_ENABLED: "true"
+          PYTHONPATH: .
+        run: |
+          nohup python -m app.run > flask.log 2>&1 &
+          sleep 5
+          cat flask.log
+
       - name: Run tests
         env:
           SECRET_KEY: test-secret-key-for-ci
