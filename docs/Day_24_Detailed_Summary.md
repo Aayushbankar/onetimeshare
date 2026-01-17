@@ -23,6 +23,7 @@ We moved beyond unit tests to verify the application from the user's perspective
 ### 3. Documentation & Knowledge
 - Created beginner-friendly guides for **Headless Browsers** and **Writing E2E Tests**.
 - Documented the realization that *writing tests can be harder than writing the app itself*, necessitating AI assistance.
+- **CI/CD Hardening**: Updated pipeline to support E2E tests by installing browsers and managing dependencies properly (after an extensive debugging session).
 
 ---
 
@@ -53,7 +54,7 @@ pytest --cov=app tests/unit tests/integration
 ## 📈 Stats
 - **Total Tests**: ~25+
 - **E2E Scenarios**: 3 Core Flows
-- **Mistakes Logged**: 3 (Mostly environment & selector issues)
+- **Mistakes Logged**: 4 (Environment, Selectors, CI/CD Pipeline)
 
 ---
 

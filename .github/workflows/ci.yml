@@ -36,6 +36,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install Playwright Browsers
+        run: |
+          playwright install chromium
+
       - name: Run tests
         env:
           SECRET_KEY: test-secret-key-for-ci
@@ -44,5 +48,6 @@ jobs:
           ADMIN_USERNAME: admin
           ADMIN_PASSWORD: testpassword
           RATELIMIT_ENABLED: "true"
+          PYTHONPATH: .
         run: |
           pytest tests/ -v --tb=short
