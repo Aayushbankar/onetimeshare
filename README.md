@@ -823,9 +823,9 @@ services:
 ---
 
 ### Week 4 Roadmap
-- ✅ **Day 24 (Jan 17)**: Integration & E2E Tests — Completed.
-- **Day 25 (Jan 18)**: Production Hardening — Final security sweep, HTTPS, CORS.
-- **Day 26 (Jan 19)**: Monitoring & Observability — Logging, error tracking.
+- ✅ **Day 24 (Jan 17)**: Integration & E2E Tests — **Completed**.
+- 🚧 **Day 25 (Jan 18)**: QC & Reporting — HTML Test Reports, Coverage Dashboards.
+- **Day 26 (Jan 19)**: Production Hardening — HTTPS enforcement, Security Headers.
 - **Day 27 (Jan 20)**: Documentation Finalization — API docs, changelog, diagrams.
 - **Day 28 (Jan 21)**: Demo Video & Screenshots — Marketing assets.
 - **Day 29 (Jan 22)**: Beta Testing & Feedback — Share with select users.
