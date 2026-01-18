@@ -824,8 +824,8 @@ services:
 
 ### Week 4 Roadmap
 - ✅ **Day 24 (Jan 17)**: Integration & E2E Tests — **Completed**.
-- 🚧 **Day 25 (Jan 18)**: QC & Reporting — HTML Test Reports, Coverage Dashboards.
-- **Day 26 (Jan 19)**: Production Hardening — HTTPS enforcement, Security Headers.
+- 🚧 **Day 25 (Jan 18)**: Security Hardening — cURL blocking, Defense-in-Depth Audit, Security Headers.
+- **Day 26 (Jan 19)**: QC & Reporting — HTML Test Reports, Coverage Dashboards.
 - **Day 27 (Jan 20)**: Documentation Finalization — API docs, changelog, diagrams.
 - **Day 28 (Jan 21)**: Demo Video & Screenshots — Marketing assets.
 - **Day 29 (Jan 22)**: Beta Testing & Feedback — Share with select users.

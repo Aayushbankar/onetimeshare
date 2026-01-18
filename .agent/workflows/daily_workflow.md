@@ -311,14 +311,21 @@ A day is "complete" when:
 
 ---
 
-## 🔧 Tools & References
+## 🔧 Tools & Skills
 
-**Always reference these**:
-- `tasks_per_day.md` - Daily goals
-- Previous `Day_XX.md` - Format consistency
-- `Day_08.md` - Best example day
-- `Day_08_Detailed_Summary.md` - Summary template
-- `Day_08_Social_Posts.md` - Post template
+**Core Skills (Use these guidelines)**:
+- `code_implementation_pass`: **Mandatory** for writing code. Follow the Pass 1 -> Review -> Fix loop.
+- `manage_mistakes_log`: **Mandatory** for tracking bugs. Do not skip.
+- `write_daily_summary`: Use for the `docs/` summary file.
+- `write_linkedin_post`: Use for the `posts/` social content.
+- `project_structure_expert`: Reference for file locations.
+
+**Key Files**:
+- `daily_logs/tasks_per_day.md` - Master Roadmap
+- `daily_logs/Day_XX.md` - Daily Log
+- `daily_logs/XX_Mistakes.md` - Mistakes Log
+- `docs/Day_XX_Detailed_Summary.md` - Tech Summary
+- `posts/Day_XX_Social_Posts.md` - LinkedIn Post
 
 **Quick Commands**:
 ```bash
@@ -354,10 +361,10 @@ If you switch models or lose context:
 3. **Read the day log** to understand what was done
 
 4. **Create missing docs** in order:
-   - Mistakes
+   - Mistakes (Skill: `manage_mistakes_log`)
    - Daily log
-   - Detailed summary
-   - Social posts
+   - Detailed summary (Skill: `write_daily_summary`)
+   - Social posts (Skill: `write_linkedin_post`)
    - Update roadmap
 
 5. **Use this template** to ensure nothing is missed
@@ -464,6 +471,6 @@ Use this EVERY day to:
 
 ---
 
-**Last Updated**: Day 9 (Jan 2, 2026)  
-**Next Review**: Day 15 (mid-project)  
+**Last Updated**: Day 16 (Jan 9, 2026)  
+**Next Review**: Day 20  
 **Status**: ✅ Template Active

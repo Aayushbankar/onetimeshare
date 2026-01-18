@@ -14,6 +14,9 @@ from flask_jwt_extended import JWTManager
 from .extensions import limiter
 from flask_limiter.util import get_remote_address
 
+from .middleware.security_headers import SecurityHeaders
+security_headers = SecurityHeaders()
+
 # Initialize extensions (no SQLAlchemy needed!)
 login_manager = LoginManager()
 jwt = JWTManager()
@@ -103,6 +106,7 @@ def create_app(test_config=None):
     # Initialize extensions with app
     login_manager.init_app(app)
     jwt.init_app(app)
+    security_headers.init_app(app)
     
     # Configure login manager
     login_manager.login_view = 'auth.login'

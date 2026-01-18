@@ -1,5 +1,5 @@
 
-from flask import Blueprint, current_app, request, jsonify, render_template
+from flask import Blueprint, current_app, request, jsonify, render_template, Response
 from config import Config
 import os 
 
@@ -28,6 +28,7 @@ from app.utils.encryption_utils import (
 
 from app.extensions import limiter
 
+from app.utils.helpers import is_cli_user_agent
 
 
 def handle_redis_error(fn):
@@ -166,13 +167,25 @@ def download_file(token):
                 "error": "Invalid metadata"
             }), 500
 
-        # 🔒 BUG FIX: Check if max retries reached BEFORE allowing access
+        #  BUG FIX: Check if max retries reached BEFORE allowing access
         # This prevents users from bypassing the lock by revisiting the URL
         if metadata.get('is_protected') == 'True':
             attempts = int(metadata.get('attempt_to_unlock', 0))
             if attempts >= Config.MAX_RETRIES:
                 current_app.logger.warning(f"Blocked access to locked file: {token} (attempts: {attempts})")
                 return render_template('max_retries.html', token=token), 403
+
+        if is_cli_user_agent(request.headers.get('User-Agent')):
+            msg = (
+                "⚠️  Access Denied for CLI Tools\n"
+                "------------------------------------------------\n"
+                "For security reasons (password protection & analytics),\n"
+                "files cannot be downloaded directly via this URL.\n\n"
+                f"Please visit the download page in your browser:\n"
+                f"    {request.host_url}download/{token}\n"
+                "------------------------------------------------\n"
+            )
+            return Response(msg, mimetype='text/plain', status=406) 
 
         
         try :
@@ -189,10 +202,8 @@ def download_file(token):
                     "error": "File is protected"
                 }), 401
                
-
-                
-            
-        
+    
+    
 
         except FileNotFoundError:
             current_app.logger.error(f"File not found on disk: {uuid_file_name}")
