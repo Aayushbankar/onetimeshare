@@ -1,0 +1,26 @@
+# CI/CD Troubleshooting Guide
+
+## date: 2026-01-18
+### Issue: Integration Test Failure in `test_cli_blocking.py`
+
+**Error:**
+The CI/CD pipeline failed with an `AssertionError` in `tests/integration/test_cli_blocking.py`.
+```
+E   assert b'Enter Password' in b'<!DOCTYPE html>...'
+```
+
+**Cause:**
+The test was asserting for the presence of the string `"Enter Password"`, but the UI template (`templates/password.html`) had been updated to use the label **"PASSWORD"** and the placeholder **"Enter decryption key..."**. The text "Enter Password" was no longer present in the response HTML.
+
+**Fix:**
+Updated `tests/integration/test_cli_blocking.py` to assert for the correct string present in the current UI:
+```python
+- assert b"Enter Password" in browser_response.data
++ assert b"Enter decryption key..." in browser_response.data
+```
+
+**Verification:**
+Run the specific test locally:
+```bash
+PYTHONPATH=. .venv/bin/pytest tests/integration/test_cli_blocking.py -v
+```

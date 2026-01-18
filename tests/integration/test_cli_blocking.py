@@ -32,7 +32,7 @@ def test_cli_blocking_protected(client):
     # 3. Try to access with Browser (Should be ALLOWED -> Password Page)
     browser_response = client.get(f'/d/{token}', headers={'User-Agent': 'Mozilla/5.0'})
     assert browser_response.status_code == 200
-    assert b"Enter Password" in browser_response.data
+    assert b"Enter decryption key..." in browser_response.data
 
 def test_cli_blocking_unprotected(client):
     """Test that CLI tools are blocked when accessing unprotected files."""
