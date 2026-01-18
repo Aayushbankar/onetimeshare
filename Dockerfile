@@ -22,4 +22,4 @@ USER appuser
 EXPOSE 5000
 
 # Use Gunicorn entrypoint
-CMD ["gunicorn", "--workers=4", "--threads=2", "--timeout=120", "--bind=0.0.0.0:5000", "run:app"]
+CMD ["sh", "-c", "gunicorn --workers=4 --threads=2 --timeout=120 --bind=0.0.0.0:${PORT:-5000} run:app"]
