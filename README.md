@@ -220,6 +220,17 @@ You are free to:
 
 ---
 
+## 📚 Documentation
+
+| Document                                               | Description                               |
+| ------------------------------------------------------ | ----------------------------------------- |
+| [API Reference](docs/API.md)                           | Full REST API documentation with examples |
+| [Architecture](docs/ARCHITECTURE.md)                   | System diagrams and request flows         |
+| [Changelog](CHANGELOG.md)                              | Version history and release notes         |
+| [CI/CD Troubleshooting](docs/CI_CD_Troubleshooting.md) | Common pipeline issues and fixes          |
+
+---
+
 ## 📅 Day 0: Inception & Foundation (Dec 24, 2025)
 **Status**: ✅ Completed
 
@@ -846,8 +857,8 @@ services:
 ### Week 4 Roadmap
 - ✅ **Day 24 (Jan 17)**: Integration & E2E Tests — **Completed**.
 - ✅ **Day 25 (Jan 18)**: Security Hardening — cURL blocking, Defense-in-Depth Audit, Security Headers.
-- **Day 26 (Jan 19)**: QC & Reporting — HTML Test Reports, Coverage Dashboards.
-- **Day 27 (Jan 20)**: Documentation Finalization — API docs, changelog, diagrams.
+- ⏸️ **Day 26 (Jan 19)**: Rest Day — Health break. Streak maintained.
+- ✅ **Day 27 (Jan 20)**: Documentation Finalization — API docs, changelog, architecture diagrams.
 - **Day 28 (Jan 21)**: Demo Video & Screenshots — Marketing assets.
 - **Day 29 (Jan 22)**: Beta Testing & Feedback — Share with select users.
 - **Day 30 (Jan 24)**: **🚀 PUBLIC LAUNCH** - Release v1.0.0.
