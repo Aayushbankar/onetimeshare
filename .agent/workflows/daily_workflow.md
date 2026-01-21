@@ -55,8 +55,8 @@ Every day follows this sequence:
 
 ### Phase 1: Start of Day (Before Coding)
 
-- [ ] Review `daily_logs/tasks_per_day.md` for today's goals
-- [ ] Create `daily_logs/Day_XX.md` with initial structure:
+- [ ] Review `docs/development/logs/tasks_per_day.md` for today's goals
+- [ ] Create `docs/development/logs/Day_XX.md` with initial structure:
   - Title and date
   - Overview section
   - Task segregation table (if applicable)
@@ -69,7 +69,7 @@ Every day follows this sequence:
 ### Phase 2: Execution (The Work)
 
 - [ ] Code in iterations (passes)
-- [ ] Document each pass in `Day_XX.md`:
+- [ ] Document each pass in `docs/development/logs/Day_XX.md`:
   - Start time
   - What was attempted
   - What failed
@@ -85,7 +85,7 @@ Every day follows this sequence:
 
 **Order matters! Create in this sequence:**
 
-#### 1. Mistakes Log: `daily_logs/XX_Mistakes.md`
+#### 1. Mistakes Log: `docs/development/logs/XX_Mistakes.md`
 **When**: Immediately after finishing work  
 **Content**:
 - Title: "Day XX Mistakes Log — [Feature Name]"
@@ -134,7 +134,7 @@ Every day follows this sequence:
 
 ---
 
-#### 2. Daily Log: `daily_logs/Day_XX.md`
+#### 2. Daily Log: `docs/development/logs/Day_XX.md`
 **When**: After mistakes log  
 **Content**:
 - Complete title section (date, theme, status)
@@ -162,7 +162,7 @@ Every day follows this sequence:
 
 ---
 
-#### 3. Detailed Summary: `docs/Day_XX_Detailed_Summary.md`
+#### 3. Detailed Summary: `docs/archive/daily_summaries/Day_XX_Detailed_Summary.md`
 **When**: After daily log  
 **Content**:
 - Title: "Day XX Detailed Summary: [Feature Name]"
@@ -186,7 +186,7 @@ Every day follows this sequence:
 
 ---
 
-#### 4. Social Posts: `posts/Day_XX_Social_Posts.md`
+#### 4. Social Posts: `docs/development/social/Day_XX_Social_Posts.md`
 **When**: After detailed summary  
 **Content**:
 - Post details (targets: impressions, reactions, etc.)
@@ -221,7 +221,7 @@ Every day follows this sequence:
 
 ---
 
-#### 5. Update Master Roadmap: `daily_logs/tasks_per_day.md`
+#### 5. Update Master Roadmap: `docs/development/logs/tasks_per_day.md`
 **When**: Last step of the day  
 **Content**:
 - Change status from "🚧 In Progress" to "✅ Completed"
@@ -242,13 +242,13 @@ Every day follows this sequence:
 
 Every day MUST have these files created:
 
-| File                         | Location      | Purpose                        |
-| ---------------------------- | ------------- | ------------------------------ |
-| `Day_XX.md`                  | `daily_logs/` | Daily log with all passes      |
-| `XX_Mistakes.md`             | `daily_logs/` | All mistakes documented        |
-| `Day_XX_Detailed_Summary.md` | `docs/`       | Technical deep dive            |
-| `Day_XX_Social_Posts.md`     | `posts/`      | Social media content           |
-| `tasks_per_day.md`           | `daily_logs/` | Updated status (existing file) |
+| File                         | Location                        | Purpose                        |
+| ---------------------------- | ------------------------------- | ------------------------------ |
+| `Day_XX.md`                  | `docs/development/logs/`        | Daily log with all passes      |
+| `XX_Mistakes.md`             | `docs/development/logs/`        | All mistakes documented        |
+| `Day_XX_Detailed_Summary.md` | `docs/archive/daily_summaries/` | Technical deep dive            |
+| `Day_XX_Social_Posts.md`     | `docs/development/social/`      | Social media content           |
+| `tasks_per_day.md`           | `docs/development/logs/`        | Updated status (existing file) |
 
 **Optional** (create if needed):
 - `implementation_plan.md` (artifacts dir) - For major features
@@ -330,16 +330,16 @@ A day is "complete" when:
 **Quick Commands**:
 ```bash
 # View previous day structure
-cat daily_logs/Day_08.md
+cat docs/development/logs/Day_08.md
 
 # Check what docs exist
-ls -la daily_logs/ docs/ posts/
+ls -la docs/development/logs/ docs/archive/daily_summaries/ docs/development/social/
 
 # Verify tests
 python -m pytest tests/
 
 # Check time tracking
-grep "Time:" daily_logs/Day_XX.md
+grep "Time:" docs/development/logs/Day_XX.md
 ```
 
 ---

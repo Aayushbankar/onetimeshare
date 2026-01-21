@@ -47,25 +47,27 @@ Thumbs.db
 
 
 
-user defined
+# user defined (Redirected to docs/development/)
 
-notes_ai/*
-daily_logs/*
-posts/*
-
-
+docs/development/notes/*
+docs/development/logs/*
+docs/development/social/*
 
 uploads/*
-docs/Content_2025-12-23_2025-12-29_Aayushbankar.xlsx
-docs/LinkedIn_Content_Deep_Analysis.md
-docs/LinkedIn_Analytics_Report_Week1.md
-docs/PostAnalytics_Aayushbankar_7411745411759140865.xlsx
-docs/Strategic_Analysis_Career_Guide.md
-docs/reume_ab.pdf
-docs/misc/*
+
+# Specific ignored docs (now in docs/development/misc)
+docs/development/misc/Content_*
+docs/development/misc/LinkedIn_Content_Deep_Analysis.md
+docs/development/misc/LinkedIn_Analytics_Report_Week1.md
+docs/development/misc/PostAnalytics_*.xlsx
+docs/development/misc/Strategic_Analysis_Career_Guide.md
+docs/development/misc/reume_ab.pdf
+docs/development/misc/*
 docs/1Day_Product_Ideas.md
 
 serve_logs.md
 
 
 .agent/*
+reports/*.html
+

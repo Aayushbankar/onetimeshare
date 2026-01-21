@@ -12,6 +12,20 @@ The culmination of the 30-Day Build Challenge.
 
 ---
 
+## [0.9.1] - 2026-01-21
+### Added
+- **Resilience**: Graceful Degradation (App survives Redis failure)
+- **Reporting**: `pytest-html` integration for visual test reports
+- **Coverage**: `pytest-cov` integration for CI artifacts
+- **Docs Refactor**: Standardized `docs/development/` structure
+- **OSS Standards**: Created `CONTRIBUTING.md`
+
+### Fixed
+- Redis `ConnectionError` causing app crash (500)
+- Flask-Limiter startup failure when Redis is down
+
+---
+
 ## [0.9.0] - 2026-01-20
 ### Added
 - **API Documentation** (`docs/API.md`)

@@ -65,3 +65,13 @@ jobs:
           PYTHONPATH: .
         run: |
           pytest tests/ -v --tb=short
+
+      - name: Upload All Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: |
+            reports/test_report.html
+            reports/coverage/
+          retention-days: 14

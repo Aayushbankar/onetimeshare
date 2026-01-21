@@ -71,3 +71,4 @@ Werkzeug==3.1.5
 wrapt==2.0.1
 greenlet
 playwright
+pytest-html

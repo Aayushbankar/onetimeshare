@@ -45,35 +45,25 @@ def create_app(test_config=None):
     with app.app_context():
         from app.services.redis_service import RedisService
         from config import Config
-        import time
-        limiter.init_app(app)  # Reads RATELIMIT_STORAGE_URI from app.config
+        limiter.init_app(app)  # Uses memory storage by default
         
-        # Retry Redis connection (Docker network may not be ready immediately)
-        redis_service = None
-        # Before the retry loop (line 32):
-        time.sleep(3)  # Wait for Docker DNS to be ready
-        for attempt in range(5):
-            try:
-                redis_service = RedisService(Config.REDIS_HOST, Config.REDIS_PORT)
-                # Test connection
-                redis_service.redis_client.ping()
-                app.logger.info(f"✅ Redis connected: {Config.REDIS_HOST}:{Config.REDIS_PORT}")
-                break
-            except Exception as e:
-                app.logger.warning(f"Redis connection attempt {attempt + 1}/5 failed: {e}")
-                if attempt < 4:
-                    time.sleep(2)  # Wait 2 seconds before retry
-        
-        if redis_service:
-            # Clean up orphaned files (files without metadata)
+        # Non-blocking Redis initialization - try once, don't spam logs
+        app.redis_available = False
+        try:
+            redis_service = RedisService(Config.REDIS_HOST, Config.REDIS_PORT)
+            redis_service.redis_client.ping()
+            app.redis_available = True
+            app.redis_service = redis_service
+            app.logger.info(f"✅ Redis connected: {Config.REDIS_HOST}:{Config.REDIS_PORT}")
+            
+            # Only do cleanup if Redis is available
             file_result = redis_service.cleanup_orphan_files()
             app.logger.info(f"Startup file cleanup: {file_result}")
             
-            # Clean up orphaned metadata (metadata without files)
             metadata_result = redis_service.cleanup_orphan_metadata()
             app.logger.info(f"Startup metadata cleanup: {metadata_result}")
             
-            # Reset analytics counters on startup
+            # Reset analytics counters
             analytics_counters = [
                 "uploads", "downloads", "deletions",
                 "index_visits", "list_files_visits", "info_visits",
@@ -84,19 +74,18 @@ def create_app(test_config=None):
                 redis_service.set_counter(counter, 0)
             app.logger.info(f"Startup analytics reset: {len(analytics_counters)} counters reset to 0")
             
-            # Reset rate limit counters on startup (so limits reset on restart)
+            # Reset rate limit counters
             try:
                 rate_limit_keys = redis_service.redis_client.keys("LIMITS:LIMITER*")
                 if rate_limit_keys:
                     redis_service.redis_client.delete(*rate_limit_keys)
-                    app.logger.info(f"🔄 Rate limit reset: {len(rate_limit_keys)} keys cleared")
-                else:
-                    app.logger.info("🔄 Rate limit reset: No existing rate limit keys")
-            except Exception as e:
-                app.logger.warning(f"Could not reset rate limits: {e}")
-        else:
-            app.logger.error("❌ Could not connect to Redis after 5 attempts!")
+            except Exception:
+                pass  # Silently ignore rate limit reset errors
+        except Exception as e:
+            app.logger.warning(f"⚠️ Redis unavailable - running in degraded mode (no file storage): {e}")
+            app.redis_service = None
         
+
         # Check admin credentials configured
         if not Config.ADMIN_PASSWORD:
             app.logger.warning("⚠️ ADMIN_PASSWORD not set! Admin login disabled.")

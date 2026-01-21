@@ -4,6 +4,7 @@ from datetime import datetime
 from config import Config
 from redis import exceptions
 import logging
+import time
 
 import os 
 from flask import current_app
@@ -13,24 +14,47 @@ class RedisService:
 
     exception = redis.exceptions
     logger = logging.getLogger(__name__)
+    
+    # Class-level cache for connection status
+    _connection_checked = False
+    _connection_available = False
+    _last_check_time = 0
+    _check_interval = 30  # Re-check every 30 seconds
+    
     def __init__(self, host, port, db=0):
         self.redis_client = redis.Redis(host=host, port=port, db=db, decode_responses=True)
 
     def __check_connection(self):
-
-        # helper fucntion to chekc of connetion is there before any fucntion cllas are donr 
-
+        """Check Redis connection with caching to prevent log spam."""
+        current_time = time.time()
+        
+        # Return cached result if checked recently
+        if RedisService._connection_checked and (current_time - RedisService._last_check_time) < RedisService._check_interval:
+            return RedisService._connection_available
+        
         try:
             self.redis_client.ping()
+            RedisService._connection_available = True
+            RedisService._connection_checked = True
+            RedisService._last_check_time = current_time
             return True
 
         except self.exception.ConnectionError as e:
-            self.logger.error(f"Redis connection error: {e}")
+            if not RedisService._connection_checked:
+                self.logger.error(f"Redis connection error: {e}")
+            RedisService._connection_available = False
+            RedisService._connection_checked = True
+            RedisService._last_check_time = current_time
             return False
             
         except Exception as e:
-            self.logger.error(f"Redis connection error: {e}")
+            if not RedisService._connection_checked:
+                self.logger.error(f"Redis connection error: {e}")
+            RedisService._connection_available = False
+            RedisService._connection_checked = True
+            RedisService._last_check_time = current_time
             return False
+
 
     def store_file_metadata(self , token, metadata) :
         # Store metadata for a file
