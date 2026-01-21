@@ -253,8 +253,8 @@ Tomorrow is Day 5: Actual file download + one-time delete logic.
 | `templates/download.html`                    | Metadata display page                   |
 | `static/css/style.css`                       | ~540 lines of Industrial Urgency CSS    |
 | `static/js/app.js`                           | ~250 lines of upload logic              |
-| `notes_ai/Day_04/mistakes.md`                | 13 documented mistakes                  |
-| `notes_ai/Day_04/javascript_crash_course.md` | JS learning notes                       |
+| `docs/development/notes/Day_04/mistakes.md`                | 13 documented mistakes                  |
+| `docs/development/notes/Day_04/javascript_crash_course.md` | JS learning notes                       |
 
 ---
 

@@ -14,7 +14,7 @@
 Instead of diving into code, today was dedicated to **learning how real-world secure apps implement encryption** — Signal, Bitwarden, Microsoft 365, and others.
 
 **Key Outputs:**
-1. **6 Deep-Dive Learning Guides** in `notes_ai/Day_15/`
+1. **6 Deep-Dive Learning Guides** in `docs/development/notes/Day_15/`
 2. **Final Architecture Decision** for OneTimeShare encryption
 3. **Real-World Incident Studies** (Heartbleed, nonce reuse, key management failures)
 

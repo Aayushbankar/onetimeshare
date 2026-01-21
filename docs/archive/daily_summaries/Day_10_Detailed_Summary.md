@@ -306,7 +306,7 @@ Not all Redis keys are hashes! Use `type()` before `hgetall()`.
 2. **`app/templates/password.html`** (~39 lines)
 3. **`app/templates/max_retries.html`** (~37 lines)
 4. **`app/templates/invalid_password.html`** (~12 lines)
-5. **14 documentation files** in `notes_ai/Day_10/`
+5. **14 documentation files** in `docs/development/notes/Day_10/`
 
 ### Modified
 1. **`app/routes.py`** (+50 lines)

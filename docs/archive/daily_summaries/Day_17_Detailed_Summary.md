@@ -27,7 +27,7 @@ Integrated a robust rate-limiting system and standardized the application's visu
 1.  **`app/extensions.py`** — Centralized Limiter instance.
 2.  **`app/templates/*.html`** — 9 redesigned error templates.
 3.  **`stats.html`** — Added Abuse Analytics card.
-4.  **6 comprehensive guides** in `notes_ai/Day_17/`.
+4.  **6 comprehensive guides** in `docs/development/notes/Day_17/`.
 
 ---
 
@@ -96,7 +96,7 @@ Integrated a robust rate-limiting system and standardized the application's visu
 | `config.py`                     | Added `RATELIMIT_STORAGE_URI` (Env var)             |
 | `app/templates/*.html`          | **Standardized 9 templates** with screws/dark theme |
 | `app/services/redis_service.py` | Added stats counters                                |
-| `notes_ai/Day_17/`              | Created 6 detailed guides                           |
+| `docs/development/notes/Day_17/`              | Created 6 detailed guides                           |
 
 ---
 

@@ -21,7 +21,7 @@ Turned Day 15's architecture research into working code:
 1. **`encryption_utils.py`** — 6 encryption functions
 2. **`serve_and_delete.py`** — Streaming decrypt with cleanup
 3. **18 unit tests** — All passing
-4. **13 learning guides** in `notes_ai/Day_16/`
+4. **13 learning guides** in `docs/development/notes/Day_16/`
 
 ---
 

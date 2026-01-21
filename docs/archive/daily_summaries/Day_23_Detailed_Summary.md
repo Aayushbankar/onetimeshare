@@ -87,9 +87,9 @@ jobs:
 | --------------------------- | ----------------- |
 | `.github/workflows/ci.yml`  | Created           |
 | `README.md`                 | Modified (badge)  |
-| `notes_ai/Day_23/*.md`      | Created (6 files) |
-| `daily_logs/Day_23.md`      | Created           |
-| `daily_logs/23_Mistakes.md` | Created           |
+| `docs/development/notes/Day_23/*.md`      | Created (6 files) |
+| `docs/development/logs/Day_23.md`      | Created           |
+| `docs/development/logs/23_Mistakes.md` | Created           |
 
 ---
 

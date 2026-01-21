@@ -40,7 +40,7 @@ User Journey:
 | File                        | Purpose                           |
 | --------------------------- | --------------------------------- |
 | `app/static/js/download.js` | Click handler for download button |
-| `notes_ai/Day_05/*.md`      | 6 textbook chapters               |
+| `docs/development/notes/Day_05/*.md`      | 6 textbook chapters               |
 
 ### Modified Files
 | File                    | Changes                                                        |

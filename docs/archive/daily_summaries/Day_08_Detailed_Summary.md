@@ -33,12 +33,12 @@ Refined the existing `atomic_delete()` function to properly handle concurrent do
 - Race condition timelines
 
 **AI Mentor Docs Created:**
-- `notes_ai/Day_08/00_Day_08_Curriculum.md`
-- `notes_ai/Day_08/01_Optimistic_Locking_Theory.md`
-- `notes_ai/Day_08/02_Redis_Transactions_Deep_Dive.md`
-- `notes_ai/Day_08/03_Concurrent_Access_Patterns.md`
-- `notes_ai/Day_08/04_Implementation_Audit_Checklist.md`
-- `notes_ai/Day_08/05_Testing_Concurrent_Downloads.md`
+- `docs/development/notes/Day_08/00_Day_08_Curriculum.md`
+- `docs/development/notes/Day_08/01_Optimistic_Locking_Theory.md`
+- `docs/development/notes/Day_08/02_Redis_Transactions_Deep_Dive.md`
+- `docs/development/notes/Day_08/03_Concurrent_Access_Patterns.md`
+- `docs/development/notes/Day_08/04_Implementation_Audit_Checklist.md`
+- `docs/development/notes/Day_08/05_Testing_Concurrent_Downloads.md`
 
 ---
 

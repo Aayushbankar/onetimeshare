@@ -7,11 +7,11 @@
 
 ## 📚 Documentation Index
 
-| Document                               | Description                 |
-| -------------------------------------- | --------------------------- |
-| [ROUTES.md](./ROUTES.md)               | All 12 routes with diagrams |
-| [DOWNLOAD_FLOW.md](./DOWNLOAD_FLOW.md) | Download sequence diagrams  |
-| [API_REFERENCE.md](./API_REFERENCE.md) | Request/response formats    |
+| Document                                            | Description                 |
+| --------------------------------------------------- | --------------------------- |
+| [ROUTES.md](./architecture/ROUTES.md)               | All 12 routes with diagrams |
+| [DOWNLOAD_FLOW.md](./architecture/DOWNLOAD_FLOW.md) | Download sequence diagrams  |
+| [API_REFERENCE.md](./API.md)                        | Request/response formats    |
 
 ---
 

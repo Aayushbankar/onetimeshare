@@ -85,7 +85,7 @@ OneTimeShare v0.1 — A secure, self-destructing file sharing system.
 
 ## Files Modified/Created
 
-- All notes in `notes_ai/Day_01/` through `Day_07/`
+- All notes in `docs/development/notes/Day_01/` through `Day_07/`
 - Daily logs for all 7 days
 - Social posts for all 7 days
 

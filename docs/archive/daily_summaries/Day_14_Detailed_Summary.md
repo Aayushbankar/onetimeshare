@@ -88,7 +88,7 @@ Comprehensive testing of all Week 2 features with critical bug discovery and fix
 
 | Type         | Files                                            |
 | ------------ | ------------------------------------------------ |
-| **Created**  | 3 notes in `notes_ai/Day_14/`                    |
+| **Created**  | 3 notes in `docs/development/notes/Day_14/`                    |
 | **Modified** | `routes.py`, `__init__.py`, `docker-compose.yml` |
 | **Assets**   | 2 flowchart diagrams (PNG)                       |
 
@@ -96,8 +96,8 @@ Comprehensive testing of all Week 2 features with critical bug discovery and fix
 
 ## Related Documents
 
-- [01_Pass_1_Findings.md](file:///mnt/shared_data/projects/onetimeshare/notes_ai/Day_14/01_Pass_1_Findings.md)
-- [03_Pass_2_Mistakes_and_Correction.md](file:///mnt/shared_data/projects/onetimeshare/notes_ai/Day_14/03_Pass_2_Mistakes_and_Correction.md)
+- [01_Pass_1_Findings.md](file:///mnt/shared_data/projects/onetimeshare/docs/development/notes/Day_14/01_Pass_1_Findings.md)
+- [03_Pass_2_Mistakes_and_Correction.md](file:///mnt/shared_data/projects/onetimeshare/docs/development/notes/Day_14/03_Pass_2_Mistakes_and_Correction.md)
 
 ---
 

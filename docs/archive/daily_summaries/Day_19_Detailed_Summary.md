@@ -19,7 +19,7 @@ Today was dedicated entirely to securing the codebase before we move towards pro
     - Generated cryptographically strong 64-character hex keys for `SECRET_KEY` and `JWT_SECRET_KEY`.
     - Moved all secrets to a secure, gitignored `.env` file.
 4.  **Config Hardening**: Enabled `HTTPOnly` and `Secure` flags for session cookies to prevent XSS/MITM attacks.
-5.  **Documentation**: Created a complete suit of security guides in `notes_ai/Day_19/`.
+5.  **Documentation**: Created a complete suit of security guides in `docs/development/notes/Day_19/`.
 
 ---
 
@@ -56,7 +56,7 @@ We started with discovery.
 | 🟠 **HIGH**     | `urllib3` / `werkzeug` CVEs     | ✅ Fixed |
 | 🟡 **LOW**      | Missing Cookie security flags   | ✅ Fixed |
 
-*See [`notes_ai/Day_19/07_Mistakes_Log.md`](../notes_ai/Day_19/07_Mistakes_Log.md) for full details.*
+*See [`docs/development/notes/Day_19/07_Mistakes_Log.md`](../docs/development/notes/Day_19/07_Mistakes_Log.md) for full details.*
 
 ---
 

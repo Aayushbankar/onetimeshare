@@ -67,13 +67,13 @@ Used Gemini AI for documentation generation because:
 - `docs/API.md`
 - `CHANGELOG.md`
 - `docs/ARCHITECTURE.md`
-- `daily_logs/Day_27.md`
-- `daily_logs/27_Mistakes.md`
-- `posts/Day_27_Social_Posts.md`
+- `docs/development/logs/Day_27.md`
+- `docs/development/logs/27_Mistakes.md`
+- `docs/development/social/Day_27_Social_Posts.md`
 
 ### Modified
 - `README.md` (added Documentation section)
-- `daily_logs/Day_26.md` (placeholder for health break)
+- `docs/development/logs/Day_26.md` (placeholder for health break)
 
 ---
 
