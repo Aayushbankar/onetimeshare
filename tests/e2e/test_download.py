@@ -54,4 +54,6 @@ def test_full_lifecycle_share(page: Page):
     
     # Expect Error Page (404/410) - "FILE DESTROYED" is the actual message for expired/deleted files
     expect(page.locator("h2.error-title")).to_contain_text("FILE DESTROYED")
-    expect(page.locator(".warning-box")).to_contain_text("deleted, expired")
+    expect(page.locator(".warning-box")).to_contain_text(
+        "OneTimeShare links only work once. This file has been permanently deleted from our servers."
+    )
