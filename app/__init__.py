@@ -41,6 +41,12 @@ def create_app(test_config=None):
     app.config.from_object(CONFIG)
     app.register_blueprint(routes.bp)
 
+    # Ensure upload directory exists
+    try:
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    except Exception as e:
+        app.logger.error(f"Failed to create upload directory: {e}")
+
 
 
 

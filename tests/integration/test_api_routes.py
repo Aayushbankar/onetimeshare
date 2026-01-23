@@ -13,6 +13,7 @@ def client():
     Config.ADMIN_PASSWORD = "testpassword"
     Config.REDIS_HOST = "localhost"
     Config.REDIS_PORT = 6379
+    Config.WTF_CSRF_ENABLED = False
     
     app = create_app()
     with app.test_client() as client:
@@ -22,7 +23,8 @@ def client():
 def test_health_check(client):
     response = client.get('/health')
     assert response.status_code == 200
-    assert response.data == b"OK"
+    json_data = response.get_json()
+    assert json_data['status'] == 'healthy'
 
 def test_index_route(client):
     response = client.get('/')

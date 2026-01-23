@@ -24,6 +24,10 @@ class RedisService:
     def __init__(self, host: str, port: int, db: int = 0) -> None:
         self.redis_client = redis.Redis(host=host, port=port, db=db, decode_responses=True)
 
+    def ping(self) -> bool:
+        """Public method to check Redis connection."""
+        return self.__check_connection()
+
     def __check_connection(self):
         """Check Redis connection with caching to prevent log spam."""
         current_time = time.time()
@@ -268,6 +272,15 @@ class RedisService:
             
             total_files_checked = 0
             
+            # Check if upload directory exists
+            if not os.path.exists(current_app.config['UPLOAD_FOLDER']):
+                self.logger.warning(f"Upload folder {current_app.config['UPLOAD_FOLDER']} does not exist. Skipping orphan cleanup.")
+                return {
+                    "success": True,
+                    "deleted_count": 0,
+                    "total_files_checked": 0
+                }
+
             # Find orphaned files
             with os.scandir(current_app.config['UPLOAD_FOLDER']) as it:
                 for entry in it:

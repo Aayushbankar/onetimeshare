@@ -203,8 +203,13 @@ document.addEventListener('DOMContentLoaded', () => {
             progressText.textContent = '50%';
 
             // Make the request
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
             const response = await fetch('/upload', {
                 method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
                 body: formData
             });
 

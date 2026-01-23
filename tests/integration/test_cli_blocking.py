@@ -8,6 +8,7 @@ import io
 def client():
     Config.TESTING = True
     Config.RATELIMIT_ENABLED = False
+    Config.WTF_CSRF_ENABLED = False
     app = create_app()
     with app.test_client() as client:
         with app.app_context():
