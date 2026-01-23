@@ -1,0 +1,107 @@
+---
+
+🔐 Day 15/30: I Sat Down to Code Encryption. 4.5 Hours Later, Zero Lines Written.
+
+Smartest thing I've done all month.
+
+Narrator: "Character development! From the guy who learned HTTP is stateless on Day 10. After 4.5 hours. It's been stateless since 1991."
+
+━━━━━━━━━━━━━━
+
+11:28 AM — THE SCENE:
+
+Coffee? Fresh.
+Confidence? Dangerous.
+Plan? "Fernet. AES. Stack Overflow. Ship by lunch."
+
+Then I had a thought. A rare one.
+
+"What if I... research this first?"
+
+Narrator: "I know. I'm as shocked as you are."
+
+━━━━━━━━━━━━━━
+
+THE STAKES:
+
+14 days. 100+ bugs fixed. All depending on ONE thing:
+
+File encryption. The heart of a "secure" file sharing app.
+
+If I get this wrong?
+
+Narrator: "Every feature becomes a liability. Every user becomes a lawsuit. No pressure."
+
+━━━━━━━━━━━━━━
+
+THE GRAVEYARD:
+
+🪦 184 HTTPS SERVERS (2016)
+Banks. Credit cards. All compromised.
+Cause: Reused a 12-byte number. ONCE.
+
+Narrator: "It's called a NONCE. 'Number used ONCE.' They had one job."
+
+🪦 APPLE (2014)
+Every device. SSL validation gone.
+Cause: One duplicated line.
+
+Narrator: "The 'goto fail;' bug. One extra line. Tim Cook cried. Probably."
+
+🪦 UBER (2016)
+57 million records exposed.
+Cause: AWS keys in PUBLIC GitHub.
+
+Narrator: "$148 million to learn what .gitignore does. Stack Overflow is free."
+
+🪦 HEARTBLEED (2014)
+17% of secure servers leaking keys.
+In production: 2 years. UNNOTICED.
+
+Narrator: "If this doesn't terrify you, you don't understand the assignment."
+
+━━━━━━━━━━━━━━
+
+THE REALIZATIONS:
+
+1. Encryption is EASY. Key management kills apps.
+
+Narrator: "Your .env committed to GitHub? Less fine."
+
+2. One bug = TOTAL compromise.
+
+Narrator: "Crypto bugs don't give warnings. They give subpoenas."
+
+━━━━━━━━━━━━━━
+
+THE DECISIONS:
+
+✅ ChaCha20-Poly1305 (Signal + WireGuard use it)
+✅ Argon2id (OWASP 2024 pick, won Password Hashing Competition)
+✅ 64KB Chunking (20MB file = 128KB RAM)
+✅ Hybrid Keys (password = zero-knowledge)
+
+Narrator: "He's following people who know what they're doing. Day 15. Progress."
+
+━━━━━━━━━━━━━━
+
+END OF DAY:
+
+Lines of code: 0
+Guides created: 6
+Incidents studied: 5
+Decisions made: 5
+
+Narrator: "4.5 hours NOT coding. Most productive security decision ever. Irony is encrypted now."
+
+━━━━━━━━━━━━━━
+
+🔗 GitHub: github.com/Aayushbankar/onetimeshare
+
+What's one thing you shipped first and Googled later?
+
+Narrator: "The comments are becoming a confessional. We all have sins."
+
+#BuildInPublic #OneTimeShare30 #Python #Encryption #Security #ChaCha20 #Argon2 #Flask #CyberSecurity #100DaysOfCode #DeveloperLife #TechHumor #Debugging
+
+---

@@ -1,0 +1,135 @@
+🔥 Day 10/30: 30 Minutes Staring at a Counter That Wouldn't Count. Then Another 30 Finding ONE Missing Line.
+
+Day 10. Password verification. Should've taken 2 hours.
+
+Narrator: "Buckle up. This will be painful."
+
+Took 4.5. With 26 bugs.
+
+━━━━━━━━━━━━━
+
+THE COUNTER FROM HELL:
+
+cnt = 0
+When password wrong:
+    cnt += 1
+
+Wrong password → "Attempt 1 of 5"
+Wrong password → "Attempt 1 of 5"  
+Wrong password → "Attempt 1 of 5"
+
+Tested 15 times. Stuck at 1.
+
+Narrator: "The counter had more stability than his understanding of HTTP."
+
+Restarted everything. LAPTOP included. Still at 1.
+
+Then: HTTP has no memory. "cnt = 0" runs EVERY REQUEST.
+
+Narrator: "He discovered what HTTP's been screaming since 1991. Stateless. It's in the docs."
+
+I felt stupid.
+
+Narrator: "Growth starts with self-awareness."
+
+━━━━━━━━━━━━━
+
+THE "FIX" THAT WASN'T:
+
+attempts = redis.get('counter')
+attempts += 1
+redis.save('counter', attempts)
+
+This HAS to work.
+
+Narrator: "It will not. Grab popcorn."
+
+STILL STUCK. 20 minutes later:
+
+def store_file_metadata():
+    save: filename
+    save: password_hash
+    # password_attempts? ← MISSING
+
+Narrator: "A save function. That doesn't save. Chef's kiss."
+
+ONE LINE.
+
+Narrator: "Not quantum physics. One line. Like forgetting to hit Send."
+
+━━━━━━━━━━━━━
+
+THEN REDIS EXPLODED:
+
+BOOM. WRONGTYPE. Called hgetall() on strings.
+
+Narrator: "That's confidently wrong. Like asking a librarian to cook dinner."
+
+Don't judge.
+
+Narrator: "Too late. Guilty."
+
+━━━━━━━━━━━━━
+
+EARLIER CARNAGE:
+
+• Deleted files BEFORE passwords
+• Read POST from GET  
+• Compared bcrypt with ==
+
+Narrator: "Pass 1 was a cry for help disguised as Python."
+
+━━━━━━━━━━━━━
+
+WHAT WORKED:
+
+✅ Three routes
+✅ Persistent retry limits
+✅ Bcrypt security
+
+26 bugs and "character development."
+
+Narrator: "'Development' is generous for 'learned HTTP after 4.5 hours.'"
+
+━━━━━━━━━━━━━
+
+TRUTH:
+
+Web apps are distributed systems in disguise.
+
+Narrator: "HTTP forgets faster than your ex. At least it's consistent."
+
+━━━━━━━━━━━━━
+
+TAKEAWAYS:
+
+1️⃣ HTTP is stateless and will gaslight you
+2️⃣ Local variables are lies
+3️⃣ If you don't save it, it's fiction
+4️⃣ Manual testing finds haunting bugs
+
+━━━━━━━━━━━━━
+
+Why share?
+
+"Build in Public" with only wins? Disney movies for devs.
+
+Reality: 26 bugs. 3 rage-quits. Googling "is farming hard"
+
+Narrator: "Persisted not from bravery, but because quitting = admitting defeat. Stubbornness: 10/10. Reading docs: 0/10."
+
+━━━━━━━━━━━━━
+
+Now working:
+✅ Bcrypt verification
+✅ Retry limits that COUNT
+✅ Files that lock
+✅ Sanity (citation needed)
+
+🔗 GitHub: github.com/Aayushbankar/onetimeshare
+
+━━━━━━━━━━━━━
+
+What bug broke you? 👇
+
+#BuildInPublic #Python #Flask #Redis #WebDevelopment #OneTimeShare30 #Debugging #100DaysOfCode

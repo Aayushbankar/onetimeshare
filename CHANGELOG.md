@@ -6,9 +6,21 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
-## [1.0.0] - 2026-01-24 (Upcoming)
+## [1.0.0] - 2026-01-23 (Launch)
 ### 🚀 Production Release
-The culmination of the 30-Day Build Challenge.
+The culmination of the 30-Day Build Challenge ("The Launch").
+
+### Security (Audit Findings)
+- **Deep Audit**: Passed "720 degree" Security Audit (Day 30).
+- **Critical Fix**: Patched Race Condition in login retry logic (Atomic Redis ops).
+- **Critical Fix**: Added CSRF Protection to Admin Login (`Flask-WTF`).
+- **Fix**: Prevented JSON leakage on 500/503 errors (now renders templates).
+- **Fix**: Returned `410 Gone` for expired files (instead of 404).
+
+### Changed
+- **Polish**: Added full Type Hints and Google-style Docstrings to core modules.
+- **Frontend**: Enforced 8-character minimum password validation.
+- **Docs**: Comprehensive "Master Project Report" and "Deep Security Audit".
 
 ---
 

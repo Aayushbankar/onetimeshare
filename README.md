@@ -11,6 +11,19 @@
 
 ---
 
+## 📸 Screenshots
+
+<p align="center">
+  <img src="docs/images/ui/home.png" alt="Home Page" width="45%">
+  <img src="docs/images/ui/upload_success.png" alt="Upload Success" width="45%">
+</p>
+<p align="center">
+  <img src="docs/images/ui/download.png" alt="Download Page" width="45%">
+  <img src="docs/images/ui/admin_dashboard.png" alt="Admin Dashboard" width="45%">
+</p>
+
+---
+
 ## 🧐 The Problem
 > *Sharing sensitive information (API keys, passwords, configuration files) via email, Discord, or WhatsApp is insecure. Third-party services like Pastebin or WeTransfer store your data on their servers, creating a privacy risk.*
 
@@ -877,8 +890,50 @@ services:
 - ⏸️ **Day 26 (Jan 19)**: Rest Day — Health break. Streak maintained.
 - ✅ **Day 27 (Jan 20)**: Documentation Finalization — API docs, changelog, architecture diagrams.
 - ✅ **Day 28 (Jan 21)**: QC, Reporting & Hardening — Resilience fix, pytest-html, docs structure.
-- **Day 29 (Jan 22)**: Demo Video, Screenshots & Code Quality — Marketing assets and type hints.
-- **Day 30 (Jan 23)**: **🚀 PUBLIC LAUNCH** - Release v1.0.0.
+- ✅ **Day 29 (Jan 22)**: Security Deep Dive — Audited crypto, logic, and fixed critical race conditions.
+- ✅ **Day 30 (Jan 23)**: **🚀 PUBLIC LAUNCH** - Release v1.0.0.
+
+---
+
+## 📅 Day 29: The Great Security Audit (Jan 22, 2026)
+**Status**: ✅ Completed
+
+### 🎯 Objective
+Instead of marketing assets (deferred), we performed a "Principal Engineer" level security audit.
+
+### Findings & Fixes
+- **Crypto Logic**: Replaced unsafe XOR nonce generation with Arithmetic Addition (`base + counter`).
+- **Timing Attacks**: Implemented `secrets.compare_digest` for constant-time auth checks.
+- **Resilience**: Patched `/health` to verify Redis/Disk dependencies properly.
+- **Safety**: Hardened `get_uuid.py` to prevent extensionless file uploads.
+
+### Grade: A
+The system is now hardened against nonce-reuse and timing side-channels.
+
+---
+
+## 📅 Day 30: Public Launch & Final Polish (Jan 23, 2026)
+**Status**: ✅ Completed (v1.0.0)
+
+### 🎯 The Finale
+We performed a final "720 Degree" Audit and shipped the OneTimeShare production release.
+
+### 🛡️ Final Security Hardening
+- **Critical Fix**: Patched a Race Condition in the password retry counter (Atomic Redis `hincrby`).
+- **Critical Fix**: Added CSRF Protection to Admin Login (`Flask-WTF`).
+- **Leakage Prevention**: Fixed Redis errors leaking JSON internal data.
+- **UX Polish**: Implemented `410 Gone` for expired files and Type Hints for code quality.
+
+### 🚀 Launch Assets
+- **Documentation**: [Master Project Report](docs/Master_Report.md) & [Deep Security Audit](docs/development/audit/Deep_Security_Audit_Day_30.md).
+- **Status**: Live on Render.
+- **Version**: v1.0.0
+
+---
+
+## 🎉 Challenge Complete!
+30 days. 30 commits. 1 secure file sharing app.
+Thanks for following the journey! #100DaysOfCode #BuildInPublic
 
 ---
 
