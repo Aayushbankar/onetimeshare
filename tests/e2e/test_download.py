@@ -52,6 +52,6 @@ def test_full_lifecycle_share(page: Page):
     # Reload the page or visit link again
     page.goto(share_link)
     
-    # Expect Error Page "LOST IN SPACE" (404)
-    expect(page.locator("h2.error-title")).to_contain_text("LOST IN SPACE")
+    # Expect Error Page (404/410) - "FILE DESTROYED" is the actual message for expired/deleted files
+    expect(page.locator("h2.error-title")).to_contain_text("FILE DESTROYED")
     expect(page.locator(".warning-box")).to_contain_text("deleted, expired")
