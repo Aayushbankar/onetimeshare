@@ -21,7 +21,7 @@ class RedisService:
     _last_check_time = 0
     _check_interval = 30  # Re-check every 30 seconds
     
-    def __init__(self, host, port, db=0):
+    def __init__(self, host: str, port: int, db: int = 0) -> None:
         self.redis_client = redis.Redis(host=host, port=port, db=db, decode_responses=True)
 
     def __check_connection(self):
@@ -56,7 +56,7 @@ class RedisService:
             return False
 
 
-    def store_file_metadata(self , token, metadata) :
+    def store_file_metadata(self, token: str, metadata: dict) -> bool:
         # Store metadata for a file
         # Input: token (str), metadata (dict)
         # Returns: True if successful, False otherwise
@@ -85,7 +85,7 @@ class RedisService:
             return False
  
 
-    def get_file_metadata(self, token) :
+    def get_file_metadata(self, token: str) -> typing.Optional[dict]:
         # Get metadata for a file
         # Input: token (str)
         # Returns: metadata dict or None if not found
@@ -95,7 +95,7 @@ class RedisService:
             self.logger.error("Token is None")
             return None
 
-    def delete_file(self, token) :
+    def delete_file(self, token: str) -> bool:
         # Delete a file
         # Input: token (str)
         # Returns: True if successful, False otherwise
@@ -107,7 +107,7 @@ class RedisService:
             return False
       
 
-    def file_exists(self, token) :
+    def file_exists(self, token: str) -> bool:
         # Check if a file exists
         # Input: token (str)
         # Returns: True if file exists, False otherwise
@@ -123,6 +123,9 @@ class RedisService:
             return False
 
     def list_files(self):
+        '''
+        List all files in the upload folder and redis keys
+        '''
         try:
             files = self.redis_client.keys('*')
 
@@ -132,13 +135,31 @@ class RedisService:
             }
         
             return resposnse
+            return resposnse
         except Exception as e:
             self.logger.error(f"Redis connection error: {e}")
             return str(e)
 
 
+    def increment_file_attempt(self, token: str) -> int:
+        '''
+        Atomically increment the attempt_to_unlock counter for a file.
+        Returns the new value.
+        '''
+        try:
+            if self.__check_connection():
+                return self.redis_client.hincrby(token, "attempt_to_unlock", 1)
+            return 9999 # Fail closed if redis down
+        except Exception as e:
+            self.logger.error(f"Redis error incrementing attempt: {e}")
+            return 9999
+
+
 
     def delete_all_keys(self):
+        '''
+        Delete all keys in redis
+        '''
         try:
             self.redis_client.flushdb()
             return True
@@ -147,7 +168,10 @@ class RedisService:
             return False
 
 
-    def delete_metadata(self, token):
+    def delete_metadata(self, token: str) -> bool:
+        '''
+        Delete metadata from redis
+        '''
         try :
             if self.__check_connection() :
                 if self.redis_client.delete(token) > 0 :
@@ -196,7 +220,6 @@ class RedisService:
 
 
     def delete_file_and_metadata(self,token):
-
         status = {
             "metadata_deleted": False,
             "file_deleted": False,
@@ -240,32 +263,38 @@ class RedisService:
         try:
             deleted_count = 0
             
-            # Get all files on disk
-            files_on_disk = os.listdir(current_app.config['UPLOAD_FOLDER'])
-            
             # Get all Redis keys (tokens)
             redis_keys = set(self.redis_client.keys('*'))
             
+            total_files_checked = 0
+            
             # Find orphaned files
-            for filename in files_on_disk:
-                # Extract token from filename (e.g., "abc123.pdf" → "abc123")
-                token = os.path.splitext(filename)[0]
-                
-                # If token NOT in Redis → orphaned file!
-                if token not in redis_keys:
-                    file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
-                    try:
-                        os.remove(file_path)
-                        deleted_count += 1
-                        self.logger.info(f"✅ Deleted orphan file: {filename}")
-                    except Exception as e:
-                        self.logger.error(f"Failed to delete orphan {filename}: {e}")
+            with os.scandir(current_app.config['UPLOAD_FOLDER']) as it:
+                for entry in it:
+                    if not entry.is_file():
+                        continue
+                        
+                    total_files_checked += 1
+                    filename = entry.name
+                    
+                    # Extract token from filename (e.g., "abc123.pdf" → "abc123")
+                    token = os.path.splitext(filename)[0]
+                    
+                    # If token NOT in Redis → orphaned file!
+                    if token not in redis_keys:
+                        file_path = entry.path
+                        try:
+                            os.remove(file_path)
+                            deleted_count += 1
+                            self.logger.info(f"✅ Deleted orphan file: {filename}")
+                        except Exception as e:
+                            self.logger.error(f"Failed to delete orphan {filename}: {e}")
             
             self.logger.info(f"Cleanup complete: {deleted_count} orphan files deleted")
             return {
                 "success": True,
                 "deleted_count": deleted_count,
-                "total_files_checked": len(files_on_disk)
+                "total_files_checked": total_files_checked
             }
             
 
@@ -292,8 +321,8 @@ class RedisService:
             # Get all Redis keys
             redis_keys = self.redis_client.keys('*')
             
-            # Get all files on disk
-            files_on_disk = set(os.listdir(current_app.config['UPLOAD_FOLDER']))
+            # REMOVED: listdir call to prevent OOM
+            # We will check os.path.exists for each key instead
             
             # Check each Redis key
             for key in redis_keys:
@@ -328,7 +357,8 @@ class RedisService:
                     continue
                 
                 # Check if file exists on disk
-                if filename not in files_on_disk:
+                file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+                if not os.path.exists(file_path):
                     # File doesn't exist → orphaned metadata!
                     self.redis_client.delete(key)
                     deleted_count += 1
@@ -351,7 +381,7 @@ class RedisService:
 
 
 
-    def increment_counter(self,key,count):
+    def increment_counter(self, key: str, count: int) -> bool:
         """Increment counter by 1"""
         try :
             if not self.__check_connection():
@@ -361,7 +391,7 @@ class RedisService:
         except Exception as e:
             self.logger.error(f"Error incrementing counter: {e}")   
             return False
-    def decrement_counter(self,key,count):
+    def decrement_counter(self, key: str, count: int) -> bool:
         """Decrement counter by 1"""
         try :
             if not self.__check_connection():

@@ -40,8 +40,8 @@ class Config:
         if not cls.ADMIN_PASSWORD:
             return False
         return (
-            username == cls.ADMIN_USERNAME and 
-            password == cls.ADMIN_PASSWORD
+            secrets.compare_digest(username, cls.ADMIN_USERNAME) and 
+            secrets.compare_digest(password, cls.ADMIN_PASSWORD)
         )
 
     CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", 64 * 1024))  # 64KB

@@ -15,7 +15,10 @@ from .extensions import limiter
 from flask_limiter.util import get_remote_address
 
 from .middleware.security_headers import SecurityHeaders
+from flask_wtf.csrf import CSRFProtect
+
 security_headers = SecurityHeaders()
+csrf = CSRFProtect()
 
 # Initialize extensions (no SQLAlchemy needed!)
 login_manager = LoginManager()
@@ -96,6 +99,7 @@ def create_app(test_config=None):
     login_manager.init_app(app)
     jwt.init_app(app)
     security_headers.init_app(app)
+    csrf.init_app(app)
     
     # Configure login manager
     login_manager.login_view = 'auth.login'

@@ -25,7 +25,7 @@ def check_file(file):
 
         #check teh file extenion from teh allowed extenions 
 
-        if file.filename.rsplit('.', 1)[1].lower() not in Config.ALLOWED_EXTENSIONS:
+        if '.' not in file.filename or file.filename.rsplit('.', 1)[1].lower() not in Config.ALLOWED_EXTENSIONS:
             logger.error("File type not allowed")
             raise FileNotAllowedException("File type not allowed")
         #check if file size is less then 20 Mib

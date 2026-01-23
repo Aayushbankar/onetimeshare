@@ -39,28 +39,35 @@ def handle_redis_error(fn):
 
         except redis.exceptions.ConnectionError as e:
             current_app.logger.error(f"Redis connection error: {e}")
-            return jsonify({"error": "Redis connection error"}), 503
+            # return jsonify({"error": "Redis connection error"}), 503
+            return render_template('503.html'), 503
 
         except redis.exceptions.TimeoutError as e:
             current_app.logger.error(f"Redis timeout error: {e}")
-            return jsonify({"error": "Redis timeout error"}), 504
+            # return jsonify({"error": "Redis timeout error"}), 504
+            return render_template('504.html'), 504
 
         except redis.exceptions.ResponseError as e:
             current_app.logger.error(f"Redis response error: {e}")
-            return jsonify({"error": "Redis response error"}), 500
+            # return jsonify({"error": "Redis response error"}), 500
+            return render_template('500.html'), 500
 
         except redis.exceptions.WatchError as e:
             current_app.logger.error(f"Redis watch error: {e}")
-            return jsonify({"error": "Redis watch error"}), 500
+            # return jsonify({"error": "Redis watch error"}), 500
+            return render_template('500.html'), 500
 
 
         except redis.RedisError as e:
             current_app.logger.error(f"Redis error: {e}")
-            return jsonify({"error": "Redis error"}), 500
+            # return jsonify({"error": "Redis error"}), 500
+            return render_template('500.html'), 500
 
         except Exception as e:
             current_app.logger.error(f"Error: {e}")
-            return jsonify({"error": "Internal server error"}), 500
+            if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+                return jsonify({"error": "Internal server error"}), 500
+            return render_template('500.html'), 500
     return wrapper
 bp = Blueprint('main', __name__)
 
@@ -70,7 +77,32 @@ redis_service = redis_service.RedisService(Config.REDIS_HOST, Config.REDIS_PORT,
 @bp.route('/health')
 @limiter.exempt
 def health_check():
-    return "OK", 200
+    checks = {
+        "redis": False,
+        "disk_write": False
+    }
+    
+    # 1. Dependency: Redis
+    try:
+        if redis_service.ping():
+            checks["redis"] = True
+    except Exception:
+        pass
+        
+    # 2. Dependency: Disk Space / Writable
+    try:
+        test_path = os.path.join(Config.UPLOAD_FOLDER, '.health')
+        with open(test_path, 'w') as f:
+            f.write('1')
+        os.remove(test_path)
+        checks["disk_write"] = True
+    except Exception:
+        pass
+
+    if all(checks.values()):
+        return jsonify({"status": "healthy", "checks": checks}), 200
+    else:
+        return jsonify({"status": "unhealthy", "checks": checks}), 503
 
 
 @bp.route('/', methods=['GET'])
@@ -154,10 +186,13 @@ def download_file(token):
         metadata = redis_service.get_file_metadata(token)
 
         if not metadata:
-            return jsonify({
-                "status": "error",
-                "error": "File not found or already downloaded  "
-            }), 410
+            # Return 410 GONE for browser, JSON for API
+            if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html:
+                return jsonify({
+                    "status": "error",
+                    "error": "File not found or already downloaded"
+                }), 410
+            return render_template('410.html'), 410
 
         uuid_file_name = metadata.get('filename')
         original_file_name = metadata.get('real_filename')
@@ -227,7 +262,7 @@ def render_download_page(token):
     if not metadata:
 
         # redis_service.increment_counter("/download - 404 - visits ",1)
-        return render_template('404.html'), 404
+        return render_template('410.html'), 410
     
 
     if metadata.get('is_protected') == 'True':
@@ -254,7 +289,7 @@ def verify_token(token):
 
             metadata = redis_service.get_file_metadata(token)
             if not metadata:
-                return jsonify({"status": "error", "message": "File not found"}), 404
+                return jsonify({"status": "error", "message": "File not found or already downloaded"}), 410
             return jsonify({"status": "success", "metadata": metadata}), 200
 
 
@@ -264,7 +299,7 @@ def verify_token(token):
             metadata = redis_service.get_file_metadata(token)
             
             if not metadata:
-                return render_template('404.html'), 404
+                return render_template('410.html'), 410
             
             password = request.form.get('password')
             
@@ -296,13 +331,10 @@ def verify_token(token):
             
             else:
                 # ❌ WRONG PASSWORD
-                # Increment attempt counter
-                current_attempts = int(metadata.get('attempt_to_unlock', 0))
-                current_attempts += 1
+                # Atomically increment attempt counter (Fix for Race Condition)
+                current_attempts = redis_service.increment_file_attempt(token)
                 
-                # Save updated count to Redis
-                metadata['attempt_to_unlock'] = str(current_attempts)
-                redis_service.store_file_metadata(token, metadata)
+                # Check if max retries reached
                 
                 # Check if max retries reached
                 if current_attempts >= Config.MAX_RETRIES:

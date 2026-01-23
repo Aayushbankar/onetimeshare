@@ -1,6 +1,7 @@
-from flask import render_template, redirect, url_for, flash, request, jsonify
+from flask import render_template, redirect, url_for, flash, request, jsonify, Response
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_jwt_extended import create_access_token
+import typing
 from datetime import datetime
 
 from app.auth import auth_bp
@@ -9,8 +10,11 @@ from config import Config
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    """Admin login page."""
+def login() -> typing.Union[str, 'Response']:
+    """
+    Render admin login page or handle login logic.
+    Returns: HTML page or Redirect.
+    """
     if current_user.is_authenticated:
         return redirect(url_for('auth.dashboard'))
     

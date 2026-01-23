@@ -25,6 +25,7 @@
         {% endwith %}
         
         <form method="POST" class="login-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div class="form-group">
                 <label class="form-label" for="username">USERNAME</label>
                 <input type="text" name="username" id="username" class="form-input" placeholder="Enter username" required autofocus>

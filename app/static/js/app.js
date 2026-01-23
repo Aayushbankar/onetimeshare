@@ -185,8 +185,16 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('file', selectedFile);
 
         // Add Password if enabled
-        if (usePassword.checked && filePassword.value) {
-            formData.append('password', filePassword.value);
+        if (usePassword.checked) {
+            const password = filePassword.value;
+            if (!password || password.length < 8) {
+                showError("Password must be at least 8 characters long.");
+                uploadBtn.disabled = false;
+                uploadBtnText.textContent = 'UPLOAD SECURELY';
+                progressContainer.classList.add('hidden');
+                return;
+            }
+            formData.append('password', password);
         }
 
         try {
