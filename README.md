@@ -931,6 +931,16 @@ We performed a final "720 Degree" Audit and shipped the OneTimeShare production 
 
 ---
 
+## 🔧 Post-Launch: v1.0.1 Hotfix (Feb 3, 2026)
+**Status**: ✅ Deployed
+
+### Bug 01: CSRF Token in Password-Protected Downloads
+- **Issue**: Password-protected file downloads failed with 403 Forbidden.
+- **Root Cause**: `password.html` form was missing the CSRF token hidden field.
+- **Fix**: Added `<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>` to the form.
+
+---
+
 ## 🎉 Challenge Complete!
 30 days. 30 commits. 1 secure file sharing app.
 Thanks for following the journey! #100DaysOfCode #BuildInPublic

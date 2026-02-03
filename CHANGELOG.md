@@ -6,6 +6,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [1.0.1] - 2026-02-03
+### Fixed
+- **Critical Bug 01**: Password-protected downloads failed with 403 Forbidden due to missing CSRF token in `password.html` form.
+
+---
+
 ## [1.0.0] - 2026-01-23 (Launch)
 ### 🚀 Production Release
 The culmination of the 30-Day Build Challenge ("The Launch").

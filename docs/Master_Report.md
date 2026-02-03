@@ -1,7 +1,7 @@
 # 🏆 Master Project Report: OneTimeShare
 
-**Date**: 2026-01-23
-**Version**: v1.0.0
+**Date**: 2026-02-03
+**Version**: v1.0.1
 **Status**: RELEASE READY
 
 ---
@@ -39,10 +39,11 @@ OneTimeShare is a secure, ephemeral file-sharing application built with **Flask*
 -   **Session**: Secure Cookie attributes (HTTPOnly, Secure).
 -   **CSRF**: Enabled via `Flask-WTF`.
 
-### Recently Fixed Vulnerabilities (Day 30)
+### Recently Fixed Vulnerabilities
 1.  **Race Condition**: Fixed via `hincrby` atomic increment.
-2.  **CSRF**: Fixed via `Flask-WTF` impl.
+2.  **CSRF (Admin)**: Fixed via `Flask-WTF` impl.
 3.  **Error Handling**: Fixed 500/404/410 leakage.
+4.  **CSRF (Downloads)**: Fixed missing CSRF token in password-protected download form (Bug 01).
 
 ### Security Score: 9.5/10
 -   **Note**: "Paranoid" level security achieved.
